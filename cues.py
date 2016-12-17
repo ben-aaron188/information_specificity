@@ -5,9 +5,10 @@ from utils import *
 
 # --> tag_ in CAPS, pos_ in CAPS, dep_ in lowercase, NE in CAPS!
 
-#seperate
-ner_time = ['TIME']
-ner_gpe = ['GPE']
-ner_loc = ['LOC']
-ner_date = ['DATE']
-ner_person = ['PERSON']
+#specific times (Warmelink)
+specific_times = ['DATE', 'TIME']
+
+specifics = ['PERSON', 'NORP', 'FAC', 'ORG', 'GPE', 'LOC', 'PRODUCT', 'EVENT', 'WORK_OF_ART', 'LAW', 'LANGUAGE', 'DATE', 'TIME', 'PERCENT', 'MONEY', 'QUANTITY', 'ORDINAL', 'CARDINAL']
+
+#modal
+modifiers = ['advcl', 'advmod', 'mark', 'neg', 'npadvmod']

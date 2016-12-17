@@ -35,7 +35,7 @@ def lexical_diversity(main_input):
 def content_diversity(main_input):
     word_array = []
     for token in main_input:
-        if token.pos_ is not 'PUNCT' and token.orth_ not in spacy.en.STOPWORDS:
+        if token.pos_ is not 'PUNCT' and parser.vocab[token.orth_].is_stop == 0:
             word_array.append(str(token))
     unique_n = len(set(word_array))
     overall_n = len(word_array)
@@ -55,7 +55,7 @@ def lexical_diversity_lem(main_input):
 def content_diversity_lem(main_input):
     word_array = []
     for token in main_input:
-        if token.pos_ is not 'PUNCT' and token.orth_ not in spacy.en.STOPWORDS:
+        if token.pos_ is not 'PUNCT' and parser.vocab[token.orth_].is_stop == 0:
             word_array.append(str(token.lemma_))
     unique_n = len(set(word_array))
     overall_n = len(word_array)
@@ -83,96 +83,120 @@ def laplace_div_optional(numerator, denominator):
 def token_based_extraction(main_input, kind):
     token_list = []
     feature1 = []
+    feature2 = []
     label = []
+    sent_attr = []
     token_list_unique = []
     feature1_unique = []
+    feature2_unique = []
     label_unique = []
     for sentence in main_input.sents:
+        sent_token_list = []
+        sent_feature1 = []
+        sent_feature2 = []
+        sent_label = []
         parsed_sent = parse_input(str(sentence))
         for entity in parsed_sent.ents:
-            if entity.label_ in ner_time:
+            if entity.label_ in specifics:
                 token_list.append(str(entity))
                 feature1.append(entity.label_)
-                label.append('ner_time')
+                feature2.append(entity.label)
+                label.append('specifics')
                 if str(entity) not in token_list_unique:
                     token_list_unique.append(str(entity))
                     feature1_unique.append(entity.label_)
-                    label_unique.append('ner_time')
-            if entity.label_ in ner_gpe:
-                token_list.append(str(entity))
-                feature1.append(entity.label_)
-                label.append('ner_gpe')
-                if str(entity) not in token_list_unique:
-                    token_list_unique.append(str(entity))
-                    feature1_unique.append(entity.label_)
-                    label_unique.append('ner_gpe')
-            if entity.label_ in ner_person:
-                token_list.append(str(entity))
-                feature1.append(entity.label_)
-                label.append('ner_person')
-                if str(entity) not in token_list_unique:
-                    token_list_unique.append(str(entity))
-                    feature1_unique.append(entity.label_)
+                    feature2_unique.append(entity.label)
                     label_unique.append('ner_person')
-            if entity.label_ in ner_loc:
-                token_list.append(str(entity))
-                feature1.append(entity.label_)
-                label.append('ner_loc')
-                if str(entity) not in token_list_unique:
-                    token_list_unique.append(str(entity))
-                    feature1_unique.append(entity.label_)
-                    label_unique.append('ner_loc')
-            if entity.label_ in ner_date:
-                token_list.append(str(entity))
-                feature1.append(entity.label_)
-                label.append('ner_date')
-                if str(entity) not in token_list_unique:
-                    token_list_unique.append(str(entity))
-                    feature1_unique.append(entity.label_)
-                    label_unique.append('ner_date')
+                sent_token_list.append(str(entity))
+                sent_feature1.append(entity.label_)
+                sent_feature2.append(entity.label)
+                sent_label.append('specifics')
+        sent_nspecifics_ne = count_in_list(sent_label, 'specifics')
         sent_nwords = word_count(sentence)
+        sent_attr.append([sent_nspecifics_ne, sent_nwords])
+    #count
     if kind == 'rate':
         ncues = len(token_list)
-        ncues_unique = len(token_list_unique)
         nwords = word_count(main_input)
+        nspecifictime = laplace_div_optional(count_in_list(label, 'specifictime'), nwords)*100
+        nspecifics_ne = laplace_div_optional(count_in_list(label, 'specifics'), nwords)*100
+        nmodifiers = laplace_div_optional(count_in_list(label, 'modifiers'), nwords)*100
         nsigns = len(main_input.text)
         nsents = len(list(main_input.sents))
         sentence_length = laplace_div_optional(nwords, nsents)
         word_length = laplace_div_optional(nsigns, nwords)
         nwords_unique = unique_words(main_input)
         nlemmas_unique = unique_lemmas(main_input)
-        ner_person_all = laplace_div_optional(count_in_list(label, 'ner_person'), nwords)*100
-        ner_loc_all = laplace_div_optional(count_in_list(label, 'ner_loc'), nwords)*100
-        ner_date_all = laplace_div_optional(count_in_list(label, 'ner_date'), nwords)*100
-        ner_gpe_all = laplace_div_optional(count_in_list(label, 'ner_gpe'), nwords)*100
-        ner_time_all = laplace_div_optional(count_in_list(label, 'ner_time'), nwords)*100
-        ner_person_unique = laplace_div_optional(count_in_list(label_unique, 'ner_person'), nwords)*100
-        ner_loc_unique = laplace_div_optional(count_in_list(label_unique, 'ner_loc'), nwords)*100
-        ner_date_unique = laplace_div_optional(count_in_list(label_unique, 'ner_date'), nwords)*100
-        ner_gpe_unique = laplace_div_optional(count_in_list(label_unique, 'ner_gpe'), nwords)*100
-        ner_time_unique = laplace_div_optional(count_in_list(label_unique, 'ner_time'), nwords)*100
+        nperson = laplace_div_optional(count_in_list(feature1, 'PERSON'), nwords)*100
+        nnorp = laplace_div_optional(count_in_list(feature1, 'NORP'), nwords)*100
+        nfac = laplace_div_optional(count_in_list(feature1, 'FAC'), nwords)*100
+        norg = laplace_div_optional(count_in_list(feature1, 'ORG'), nwords)*100
+        ngpe = laplace_div_optional(count_in_list(feature1, 'GPE'), nwords)*100
+        nloc = laplace_div_optional(count_in_list(feature1, 'LOC'), nwords)*100
+        nproduct = laplace_div_optional(count_in_list(feature1, 'PRODUCT'), nwords)*100
+        nevent = laplace_div_optional(count_in_list(feature1, 'EVENT'), nwords)*100
+        nworkofart = laplace_div_optional(count_in_list(feature1, 'WORK_OF_ART'), nwords)*100
+        nlaw = laplace_div_optional(count_in_list(feature1, 'LAW'), nwords)*100
+        nlanguage = laplace_div_optional(count_in_list(feature1, 'LANGUAGE'), nwords)*100
+        ndate = laplace_div_optional(count_in_list(feature1, 'DATE'), nwords)*100
+        ntime = laplace_div_optional(count_in_list(feature1, 'TIME'), nwords)*100
+        npercent = laplace_div_optional(count_in_list(feature1, 'PERCENT'), nwords)*100
+        nmoney = laplace_div_optional(count_in_list(feature1, 'MONEY'), nwords)*100
+        nquantity = laplace_div_optional(count_in_list(feature1, 'QUANTITY'), nwords)*100
+        nordinal = laplace_div_optional(count_in_list(feature1, 'ORDINAL'), nwords)*100
+        ncardinal = laplace_div_optional(count_in_list(feature1, 'CARDINAL'), nwords)*100
     elif kind == 'count':
         ncues = len(token_list)
-        ncues_unique = len(token_list_unique)
         nwords = word_count(main_input)
+        nspecifics_ne = count_in_list(label, 'specifics')
         nsigns = len(main_input.text)
         nsents = len(list(main_input.sents))
         sentence_length = laplace_div_optional(nwords, nsents)
         word_length = laplace_div_optional(nsigns, nwords)
         nwords_unique = unique_words(main_input)
         nlemmas_unique = unique_lemmas(main_input)
-        ner_person_all = count_in_list(label, 'ner_person')
-        ner_loc_all = count_in_list(label, 'ner_loc')
-        ner_date_all = count_in_list(label, 'ner_date')
-        ner_gpe_all = count_in_list(label, 'ner_gpe')
-        ner_time_all = count_in_list(label, 'ner_time')
-        ner_person_unique = count_in_list(label_unique, 'ner_person')
-        ner_loc_unique = count_in_list(label_unique, 'ner_loc')
-        ner_date_unique = count_in_list(label_unique, 'ner_date')
-        ner_gpe_unique = count_in_list(label_unique, 'ner_gpe')
-        ner_time_unique = count_in_list(label_unique, 'ner_time')
+        #non-unique
+        nperson = count_in_list(feature1, 'PERSON')
+        nnorp = count_in_list(feature1, 'NORP')
+        nfac = count_in_list(feature1, 'FAC')
+        norg = count_in_list(feature1, 'ORG')
+        ngpe = count_in_list(feature1, 'GPE')
+        nloc = count_in_list(feature1, 'LOC')
+        nproduct = count_in_list(feature1, 'PRODUCT')
+        nevent = count_in_list(feature1, 'EVENT')
+        nworkofart = count_in_list(feature1, 'WORK_OF_ART')
+        nlaw = count_in_list(feature1, 'LAW')
+        nlanguage = count_in_list(feature1, 'LANGUAGE')
+        ndate = count_in_list(feature1, 'DATE')
+        ntime = count_in_list(feature1, 'TIME')
+        npercent = count_in_list(feature1, 'PERCENT')
+        nmoney = count_in_list(feature1, 'MONEY')
+        nquantity = count_in_list(feature1, 'QUANTITY')
+        nordinal = count_in_list(feature1, 'ORDINAL')
+        ncardinal = count_in_list(feature1, 'CARDINAL')
+        #unique
+        nperson_unique = count_in_list(feature1_unique, 'PERSON')
+        nnorp_unique = count_in_list(feature1_unique, 'NORP')
+        nfac_unique = count_in_list(feature1_unique, 'FAC')
+        norg_unique = count_in_list(feature1_unique, 'ORG')
+        ngpe_unique = count_in_list(feature1_unique, 'GPE')
+        nloc_unique = count_in_list(feature1_unique, 'LOC')
+        nproduct_unique = count_in_list(feature1_unique, 'PRODUCT')
+        nevent_unique = count_in_list(feature1_unique, 'EVENT')
+        nworkofart_unique = count_in_list(feature1_unique, 'WORK_OF_ART')
+        nlaw_unique = count_in_list(feature1_unique, 'LAW')
+        nlanguage_unique = count_in_list(feature1_unique, 'LANGUAGE')
+        ndate_unique = count_in_list(feature1_unique, 'DATE')
+        ntime_unique = count_in_list(feature1_unique, 'TIME')
+        npercent_unique = count_in_list(feature1_unique, 'PERCENT')
+        nmoney_unique = count_in_list(feature1_unique, 'MONEY')
+        nquantity_unique = count_in_list(feature1_unique, 'QUANTITY')
+        nordinal_unique = count_in_list(feature1_unique, 'ORDINAL')
+        ncardinal_unique = count_in_list(feature1_unique, 'CARDINAL')
     lexical_diversity_score = lexical_diversity(main_input)
     content_diversity_score = content_diversity(main_input)
     lexical_diversity_lem_score = lexical_diversity_lem(main_input)
     content_diversity_lem_score = content_diversity_lem(main_input)
-    return{"tokens_all": token_list, "tokens_unique": token_list_unique, "feature1_all": feature1, "feature1_unique": feature1_unique, "label_all": label, "label_unique": label_unique, "ncues_all": ncues, "ncues_unique": ncues_unique, "ner_time_all": ner_time_all, "ner_time_unique": ner_time_unique, "ner_person_all": ner_person_all, "ner_person_unique": ner_person_unique, "ner_loc_all": ner_loc_all, "ner_loc_unique": ner_loc_unique, "ner_date_all": ner_date_all, "ner_date_unique": ner_date_unique, "ner_gpe_all": ner_gpe_all, "ner_gpe_unique": ner_gpe_unique, "lexical_diversity_score": lexical_diversity_score, "content_diversity_score": content_diversity_score, "lexical_diversity_lem_score": lexical_diversity_lem_score, "content_diversity_lem_score": content_diversity_lem_score}
+    return{"tokens": token_list, "feature1": feature1, "feature2": feature2, "label": label,
+    "ncues": ncues, "nspecifics_ne": nspecifics_ne, "nwords": nwords, "nsents": nsents, "sentence_length": sentence_length, "word_length": word_length, "nwords_unique": nwords_unique, "nlemmas_unique": nlemmas_unique, "nperson": nperson, "nnorp": nnorp, "nfac": nfac, "norg": norg, "ngpe": ngpe, "nloc": nloc, "nproduct": nproduct, "nevent": nevent, "nworkofart": nworkofart, "nlaw": nlaw, "nlanguage": nlanguage, "ndate": ndate, "ntime": ntime, "npercent": npercent, "nmoney": nmoney, "nquantity": nquantity, "nordinal": nordinal, "ncardinal": ncardinal,
+    "nperson_unique": nperson_unique, "nnorp_unique": nnorp_unique, "nfac_unique": nfac_unique, "norg_unique": norg_unique, "ngpe_unique": ngpe_unique, "nloc_unique": nloc_unique, "nproduct_unique": nproduct_unique, "nevent_unique": nevent_unique, "nworkofart_unique": nworkofart_unique, "nlaw_unique": nlaw_unique, "nlanguage_unique": nlanguage_unique, "ndate_unique": ndate_unique, "ntime_unique": ntime_unique, "npercent_unique": npercent_unique, "nmoney_unique": nmoney_unique, "nquantity_unique": nquantity_unique, "nordinal_unique": nordinal_unique, "ncardinal_unique": ncardinal_unique, "lexical_diversity_score": lexical_diversity_score, "content_diversity_score": content_diversity_score, "lexical_diversity_lem_score": lexical_diversity_lem_score, "content_diversity_lem_score": content_diversity_lem_score, "sent_attr": sent_attr}
