@@ -33,9 +33,6 @@ def main_extractor(input, outputname, kind):
 
 
 basedir = '/Users/bennettkleinberg/GitHub/information_specificity/data_'
-# ott_neg = '/Users/bennettkleinberg/BitBucket/algo_2/spacy/data/statement_specificity_paper/ott_et_al/negative_polarity'
-# ott_pos = '/Users/bennettkleinberg/BitBucket/algo_2/spacy/data/statement_specificity_paper/ott_et_al/positive_polarity'
-
 
 def analyse_files(filepath, outputappendix, kind):
     # take t1
@@ -57,7 +54,4 @@ def analyse_files(filepath, outputappendix, kind):
     elapsed_time = t2 - t1
     print(elapsed_time)
 
-# analyse_files(filepath=ott_neg, outputappendix='ott_neg', kind='rate')
-# analyse_files(filepath=ott_pos, outputappendix='ott_pos', kind='rate')
 analyse_files(filepath=basedir, outputappendix='basedir_test', kind='count')
-#analyse_files(filepath=exp1_all, outputappendix='algo2_exp1_allquestions', kind='rate')
