@@ -16,7 +16,7 @@ def sum_up(list):
 	return sum
 
 
-def get_data(path, feature_set):
+def get_data(path, feature_set, pol):
 	features = []
 
 	with open(path) as csv_file:
@@ -28,7 +28,7 @@ def get_data(path, feature_set):
 			veracity = int(row[len(row) - 5])
 
 			# 0 -> deceptive, 1 -> truthful
-			if polarity == 0 or polarity == 1:
+			if polarity == pol:
 
 				if feature_set == "ner":
 					for i in range(23, 41):
@@ -65,30 +65,15 @@ def get_data(path, feature_set):
 				features.append([vector, veracity])
 
 	random.shuffle(features)
+	
+	X = []
+	C = []
 
-	split = 1280
+	for elem in features:
+		X.append(elem[0])
+		C.append(elem[1])
 
-	# automatically adjust split size
-	if (len(features) == 800):
-		split = 640
-
-	train = features[:split]
-	test = features[split:]
-
-	X_train = []
-	X_test = []
-	C_train = []
-	C_test = []
-
-	for elem in train:
-		X_train.append(elem[0])
-		C_train.append(elem[1])
-
-	for elem in test:
-		X_test.append(elem[0])
-		C_test.append(elem[1])
-
-	return X_train, C_train, X_test, C_test
+	return X, C
 
 
 def compute_acc(targets, data):
@@ -101,6 +86,42 @@ def compute_acc(targets, data):
 	return count / (len(targets))
 
 
+def get_train_data(folds, x):
+	X_train = []
+	C_train = []
+
+	for i in range(0, len(folds)):
+
+		if i != x:
+			current = folds[i]
+
+			for k in range(0, len(current[0])):
+				X_train.append(current[0][k])
+				C_train.append(current[1][k])
+
+	return X_train, C_train
+
+
+def k_fold(X, C, k, classifier):
+	size = int(len(X) / k)
+	folds = []
+	accuracy = 0
+
+	for i in range(0, k):
+		folds.append([X[i * size:(i + 1) * size], C[i * size:(i + 1) * size]])
+
+	for x in range(0, len(folds)):
+		X_train, C_train = get_train_data(folds, x)
+
+		X_test = folds[x][0]
+		C_test = folds[x][1]
+
+		trained = classifier.fit(X_train, C_train)
+		accuracy = accuracy + compute_acc(C_test, trained.predict(X_test))
+
+	return accuracy / k
+
+
 def main():
 	atts = [
 		["NER", "ner"],
@@ -110,47 +131,49 @@ def main():
 		["NER + Unique NER + LIWC", "comb"]
 	]
 
+	inner_atts = [
+		["Negative", 0],
+		["Positive", 1]
+	]
+
+	k = 5
+
 	for att in atts:
 		print(att[0])
-		X_train, C_train, X_test, C_test = get_data("inf_spec_ner_liwc_speciteller.csv", att[1])
 
-		gnb = GaussianNB()
-		gnbp = gnb.fit(X_train, C_train)
-		print("GNB: " + str(compute_acc(C_test, gnbp.predict(X_test))))
+		for polarity in inner_atts:
+			print(polarity[0])
 
-		bnb = BernoulliNB()
-		bnbp = bnb.fit(X_train, C_train)
-		print("BNB: " + str(compute_acc(C_test, bnbp.predict(X_test))))
+			X, C = get_data("inf_spec_ner_liwc_speciteller.csv", att[1], polarity[1])
 
-		mnb = MultinomialNB()
-		mnbp = mnb.fit(X_train, C_train)
-		print("MNB: " + str(compute_acc(C_test, mnbp.predict(X_test))))
+			gnb = GaussianNB()
+			print("GNB: " + str(k_fold(X, C, k, gnb)))
 
-		rf = RandomForestClassifier(n_estimators=200, criterion='entropy')
-		rfp = rf.fit(X_train, C_train)
-		print("RF: " + str(compute_acc(C_test, rfp.predict(X_test))))
+			bnb = BernoulliNB()
+			print("BNB: " + str(k_fold(X, C, k, bnb)))
 
-		lsvc = LinearSVC(loss='squared_hinge', penalty="l1", dual=False, tol=1e-3)
-		lsvcp = lsvc.fit(X_train, C_train)
-		print("Linear SVM: " + str(compute_acc(C_test, lsvcp.predict(X_test))))
+			bnb = MultinomialNB()
+			print("MNB: " + str(k_fold(X, C, k, bnb)))
 
-		svc = SVC()
-		svcp = svc.fit(X_train, C_train)
-		print("SVM: " + str(compute_acc(C_test, svcp.predict(X_test))))
+			rf = RandomForestClassifier(n_estimators=200, criterion='entropy')
+			print("RF: " + str(k_fold(X, C, k, rf)))
 
-		knn = KNeighborsClassifier(n_neighbors=10)
-		knnp = knn.fit(X_train, C_train)
-		print("KNN: " + str(compute_acc(C_test, knnp.predict(X_test))))
+			lsvc = LinearSVC(penalty="l1", dual=False, tol=1e-3)
+			print("Linear SVM: " + str(k_fold(X, C, k, lsvc)))
 
-		pc = Perceptron(n_iter=50)
-		pcp = pc.fit(X_train, C_train)
-		print("Perceptron: " + str(compute_acc(C_test, pcp.predict(X_test))))
+			svc = SVC(kernel='linear')
+			print("SVM (linear kernel): " + str(k_fold(X, C, k, svc)))
 
-		ridge = RidgeClassifier(tol=1e-2, solver="lsqr")
-		ridgep = ridge.fit(X_train, C_train)
-		print("Ridge Classifier: " + str(compute_acc(C_test, ridgep.predict(X_test))))
+			knn = KNeighborsClassifier(n_neighbors=10)
+			print("kNN: " + str(k_fold(X, C, k, knn)))
 
-		print("")
+			pc = Perceptron(n_iter=50)
+			print("Perceptron: " + str(k_fold(X, C, k, pc)))
+
+			ridge = RidgeClassifier(tol=1e-2, solver="lsqr")
+			print("Ridge Regression: " + str(k_fold(X, C, k, ridge)))
+
+			print("")
 
 
 main()
