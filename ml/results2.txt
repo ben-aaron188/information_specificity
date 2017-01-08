@@ -413,3 +413,507 @@ avg / total       0.78      0.78      0.77       640
 
 
 >>>
+
+
+
+################## WITH 5-fold CV
+>>> main2(0.80, 5)
+NER
+Negative
+RF:
+             precision    recall  f1-score   support
+
+          0       0.59      0.69      0.64       315
+          1       0.64      0.54      0.59       325
+
+avg / total       0.62      0.61      0.61       640
+
+precision = 65.96
+recall = 66.5
+F1 = 64.56
+accuracy = 66.12
+-------------------------------------------------------
+Linear SVM:
+             precision    recall  f1-score   support
+
+          0       0.59      0.75      0.66       315
+          1       0.67      0.48      0.56       325
+
+avg / total       0.63      0.62      0.61       640
+
+precision = 67.93
+recall = 56.75
+F1 = 64.49
+accuracy = 64.88
+-------------------------------------------------------
+Logistic regression:
+             precision    recall  f1-score   support
+
+          0       0.60      0.73      0.66       315
+          1       0.67      0.52      0.58       325
+
+avg / total       0.63      0.62      0.62       640
+
+precision = 65.08
+recall = 55.75
+F1 = 62.59
+accuracy = 63.0
+-------------------------------------------------------
+
+Positive
+RF:
+             precision    recall  f1-score   support
+
+          0       0.62      0.70      0.66       321
+          1       0.65      0.56      0.61       319
+
+avg / total       0.64      0.63      0.63       640
+
+precision = 66.41
+recall = 63.5
+F1 = 67.22
+accuracy = 66.12
+-------------------------------------------------------
+Linear SVM:
+             precision    recall  f1-score   support
+
+          0       0.65      0.79      0.72       321
+          1       0.74      0.58      0.65       319
+
+avg / total       0.69      0.69      0.68       640
+
+precision = 73.16
+recall = 61.25
+F1 = 69.16
+accuracy = 69.38
+-------------------------------------------------------
+Logistic regression:
+             precision    recall  f1-score   support
+
+          0       0.66      0.79      0.71       321
+          1       0.73      0.59      0.65       319
+
+avg / total       0.69      0.69      0.68       640
+
+precision = 71.74
+recall = 62.0
+F1 = 68.6
+accuracy = 68.75
+-------------------------------------------------------
+
+Unique NER
+Negative
+RF:
+             precision    recall  f1-score   support
+
+          0       0.58      0.61      0.60       318
+          1       0.60      0.57      0.58       322
+
+avg / total       0.59      0.59      0.59       640
+
+precision = 58.59
+recall = 62.0
+F1 = 57.57
+accuracy = 59.13
+-------------------------------------------------------
+Linear SVM:
+             precision    recall  f1-score   support
+
+          0       0.61      0.72      0.66       318
+          1       0.66      0.55      0.60       322
+
+avg / total       0.64      0.63      0.63       640
+
+precision = 67.84
+recall = 57.5
+F1 = 64.84
+accuracy = 65.12
+-------------------------------------------------------
+Logistic regression:
+             precision    recall  f1-score   support
+
+          0       0.61      0.70      0.65       318
+          1       0.66      0.56      0.60       322
+
+avg / total       0.63      0.63      0.63       640
+
+precision = 66.44
+recall = 60.25
+F1 = 64.69
+accuracy = 64.88
+-------------------------------------------------------
+
+Positive
+RF:
+             precision    recall  f1-score   support
+
+          0       0.61      0.70      0.65       311
+          1       0.67      0.58      0.62       329
+
+avg / total       0.64      0.64      0.64       640
+
+precision = 66.85
+recall = 65.75
+F1 = 65.73
+accuracy = 65.75
+-------------------------------------------------------
+Linear SVM:
+             precision    recall  f1-score   support
+
+          0       0.61      0.80      0.69       311
+          1       0.73      0.51      0.60       329
+
+avg / total       0.67      0.65      0.65       640
+
+precision = 73.65
+recall = 60.0
+F1 = 68.67
+accuracy = 69.0
+-------------------------------------------------------
+Logistic regression:
+             precision    recall  f1-score   support
+
+          0       0.62      0.80      0.70       311
+          1       0.74      0.54      0.62       329
+
+avg / total       0.68      0.66      0.66       640
+
+precision = 72.45
+recall = 61.0
+F1 = 68.37
+accuracy = 68.62
+-------------------------------------------------------
+
+LIWC
+Negative
+RF:
+             precision    recall  f1-score   support
+
+          0       0.71      0.74      0.72       321
+          1       0.73      0.69      0.71       319
+
+avg / total       0.72      0.72      0.72       640
+
+precision = 77.3
+recall = 74.5
+F1 = 76.86
+accuracy = 75.62
+-------------------------------------------------------
+Linear SVM:
+             precision    recall  f1-score   support
+
+          0       0.72      0.64      0.68       321
+          1       0.67      0.74      0.71       319
+
+avg / total       0.69      0.69      0.69       640
+
+precision = 76.63
+recall = 77.0
+F1 = 76.74
+accuracy = 76.75
+-------------------------------------------------------
+Logistic regression:
+             precision    recall  f1-score   support
+
+          0       0.71      0.65      0.68       321
+          1       0.68      0.73      0.70       319
+
+avg / total       0.69      0.69      0.69       640
+
+precision = 77.13
+recall = 77.25
+F1 = 77.12
+accuracy = 77.12
+-------------------------------------------------------
+
+Positive
+RF:
+             precision    recall  f1-score   support
+
+          0       0.79      0.77      0.78       323
+          1       0.77      0.79      0.78       317
+
+avg / total       0.78      0.78      0.78       640
+
+precision = 78.91
+recall = 74.0
+F1 = 78.09
+accuracy = 78.5
+-------------------------------------------------------
+Linear SVM:
+             precision    recall  f1-score   support
+
+          0       0.71      0.72      0.71       323
+          1       0.71      0.69      0.70       317
+
+avg / total       0.71      0.71      0.71       640
+
+precision = 79.81
+recall = 78.5
+F1 = 79.36
+accuracy = 79.5
+-------------------------------------------------------
+Logistic regression:
+             precision    recall  f1-score   support
+
+          0       0.70      0.72      0.71       323
+          1       0.70      0.69      0.70       317
+
+avg / total       0.70      0.70      0.70       640
+
+precision = 80.25
+recall = 79.5
+F1 = 79.85
+accuracy = 79.88
+-------------------------------------------------------
+
+NER + LIWC
+Negative
+RF:
+             precision    recall  f1-score   support
+
+          0       0.75      0.76      0.75       323
+          1       0.75      0.74      0.74       317
+
+avg / total       0.75      0.75      0.75       640
+
+precision = 77.97
+recall = 71.75
+F1 = 76.48
+accuracy = 76.25
+-------------------------------------------------------
+Linear SVM:
+             precision    recall  f1-score   support
+
+          0       0.73      0.75      0.74       323
+          1       0.74      0.72      0.73       317
+
+avg / total       0.74      0.74      0.74       640
+
+precision = 77.28
+recall = 72.75
+F1 = 75.69
+accuracy = 75.37
+-------------------------------------------------------
+Logistic regression:
+             precision    recall  f1-score   support
+
+          0       0.77      0.77      0.77       323
+          1       0.76      0.77      0.77       317
+
+avg / total       0.77      0.77      0.77       640
+
+precision = 77.51
+recall = 73.0
+F1 = 75.71
+accuracy = 75.75
+-------------------------------------------------------
+
+Positive
+RF:
+             precision    recall  f1-score   support
+
+          0       0.75      0.66      0.71       322
+          1       0.70      0.78      0.74       318
+
+avg / total       0.73      0.72      0.72       640
+
+precision = 81.18
+recall = 76.25
+F1 = 80.08
+accuracy = 80.25
+-------------------------------------------------------
+Linear SVM:
+             precision    recall  f1-score   support
+
+          0       0.73      0.67      0.70       322
+          1       0.69      0.75      0.72       318
+
+avg / total       0.71      0.71      0.71       640
+
+precision = 80.6
+recall = 78.25
+F1 = 79.85
+accuracy = 79.75
+-------------------------------------------------------
+Logistic regression:
+             precision    recall  f1-score   support
+
+          0       0.72      0.73      0.73       322
+          1       0.72      0.72      0.72       318
+
+avg / total       0.72      0.72      0.72       640
+
+precision = 81.81
+recall = 78.5
+F1 = 80.47
+accuracy = 80.5
+-------------------------------------------------------
+
+Unique NER + LIWC
+Negative
+RF:
+             precision    recall  f1-score   support
+
+          0       0.75      0.72      0.74       320
+          1       0.73      0.76      0.75       320
+
+avg / total       0.74      0.74      0.74       640
+
+precision = 78.51
+recall = 73.5
+F1 = 77.33
+accuracy = 76.62
+-------------------------------------------------------
+Linear SVM:
+             precision    recall  f1-score   support
+
+          0       0.69      0.69      0.69       320
+          1       0.69      0.70      0.69       320
+
+avg / total       0.69      0.69      0.69       640
+
+precision = 76.98
+recall = 74.25
+F1 = 76.2
+accuracy = 76.0
+-------------------------------------------------------
+Logistic regression:
+             precision    recall  f1-score   support
+
+          0       0.69      0.71      0.70       320
+          1       0.70      0.68      0.69       320
+
+avg / total       0.69      0.69      0.69       640
+
+precision = 78.5
+recall = 74.0
+F1 = 76.67
+accuracy = 76.75
+-------------------------------------------------------
+
+Positive
+RF:
+             precision    recall  f1-score   support
+
+          0       0.75      0.76      0.76       320
+          1       0.76      0.75      0.76       320
+
+avg / total       0.76      0.76      0.76       640
+
+precision = 81.65
+recall = 77.0
+F1 = 80.33
+accuracy = 78.88
+-------------------------------------------------------
+Linear SVM:
+             precision    recall  f1-score   support
+
+          0       0.72      0.78      0.75       320
+          1       0.76      0.69      0.72       320
+
+avg / total       0.74      0.74      0.74       640
+
+precision = 79.13
+recall = 77.0
+F1 = 78.1
+accuracy = 78.13
+-------------------------------------------------------
+Logistic regression:
+             precision    recall  f1-score   support
+
+          0       0.71      0.74      0.73       320
+          1       0.73      0.70      0.72       320
+
+avg / total       0.72      0.72      0.72       640
+
+precision = 78.76
+recall = 78.0
+F1 = 78.35
+accuracy = 78.38
+-------------------------------------------------------
+
+NER + Unique NER + LIWC
+Negative
+RF:
+             precision    recall  f1-score   support
+
+          0       0.74      0.67      0.71       323
+          1       0.70      0.76      0.73       317
+
+avg / total       0.72      0.72      0.72       640
+
+precision = 76.92
+recall = 75.0
+F1 = 76.22
+accuracy = 75.75
+-------------------------------------------------------
+Linear SVM:
+             precision    recall  f1-score   support
+
+          0       0.70      0.73      0.72       323
+          1       0.71      0.69      0.70       317
+
+avg / total       0.71      0.71      0.71       640
+
+precision = 75.34
+recall = 75.5
+F1 = 75.61
+accuracy = 75.25
+-------------------------------------------------------
+Logistic regression:
+             precision    recall  f1-score   support
+
+          0       0.70      0.69      0.70       323
+          1       0.69      0.69      0.69       317
+
+avg / total       0.69      0.69      0.69       640
+
+precision = 75.95
+recall = 75.5
+F1 = 75.73
+accuracy = 75.75
+-------------------------------------------------------
+
+Positive
+RF:
+             precision    recall  f1-score   support
+
+          0       0.71      0.87      0.78       317
+          1       0.84      0.66      0.74       323
+
+avg / total       0.78      0.76      0.76       640
+
+precision = 81.23
+recall = 76.5
+F1 = 79.16
+accuracy = 80.88
+-------------------------------------------------------
+Linear SVM:
+             precision    recall  f1-score   support
+
+          0       0.73      0.71      0.72       317
+          1       0.72      0.74      0.73       323
+
+avg / total       0.73      0.73      0.73       640
+
+precision = 80.82
+recall = 79.5
+F1 = 80.85
+accuracy = 80.13
+-------------------------------------------------------
+Logistic regression:
+             precision    recall  f1-score   support
+
+          0       0.71      0.78      0.75       317
+          1       0.76      0.69      0.73       323
+
+avg / total       0.74      0.74      0.74       640
+
+precision = 81.86
+recall = 78.5
+F1 = 80.46
+accuracy = 80.5
+-------------------------------------------------------
+
+>>>
