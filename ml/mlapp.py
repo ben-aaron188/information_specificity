@@ -4,7 +4,7 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.naive_bayes import GaussianNB, BernoulliNB, MultinomialNB
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.linear_model import Perceptron
-from sklearn.linear_model import RidgeClassifier
+from sklearn.linear_model import RidgeClassifier, PassiveAggressiveClassifier
 
 
 def sum_up(list):
@@ -49,6 +49,13 @@ def get_data(path, feature_set, pol):
 
 					for i in range(67, 160):
 						vector.append(float(row[i]))
+				elif feature_set == "unerliwc":
+					for i in range(41, 59):
+						vector.append(float(row[i]))
+
+					for i in range(67, 160):
+						vector.append(float(row[i]))
+
 				elif feature_set == "comb":
 					for i in range(23, 41):
 						vector.append(float(row[i]))
@@ -128,6 +135,7 @@ def main():
 		["Unique NER", "uner"],
 		["LIWC", "liwc"],
 		["NER + LIWC", "nerliwc"],
+		["Unique NER + LIWC", "unerliwc"],
 		["NER + Unique NER + LIWC", "comb"]
 	]
 
@@ -172,6 +180,9 @@ def main():
 
 			ridge = RidgeClassifier(tol=1e-2, solver="lsqr")
 			print("Ridge Regression: " + str(k_fold(X, C, k, ridge)))
+
+			pa = PassiveAggressiveClassifier()
+			print("Passive Aggressive: " + str(k_fold(X, C, k, pa)))
 
 			print("")
 
