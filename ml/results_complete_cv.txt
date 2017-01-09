@@ -61,6 +61,8 @@ F1 class1: 64.85
 Accuracy: 69.38
 
 -------------------------------------------------------
+
+@MAXI: HIER HABE ICH GESTOPPT
 Unique NER
 Negative
 --------- RF --------
