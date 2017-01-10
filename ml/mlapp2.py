@@ -40,6 +40,14 @@ def get_data(path, feature_set, pol):
 					for i in range(41, 59):
 						vector.append(float(row[i]))
 					vector.append(float(row[171]))
+				elif feature_set == "uner_best_freq":
+					vector.append(float(row[41]))
+					vector.append(float(row[43]))
+					vector.append(float(row[52]))
+					vector.append(float(row[53]))
+					vector.append(float(row[55]))
+					vector.append(float(row[57]))
+					vector.append(float(row[58]))
 				elif feature_set == "liwc":
 					for i in range(67, 160):
 						vector.append(float(row[i]))
@@ -57,12 +65,39 @@ def get_data(path, feature_set, pol):
 						vector.append(float(row[i]))
 					vector.append(float(row[171]))
 					vector.append(float(row[167]))
+				elif feature_set == "uner_best_freq_liwc":
+					vector.append(float(row[41]))
+					vector.append(float(row[43]))
+					vector.append(float(row[52]))
+					vector.append(float(row[53]))
+					vector.append(float(row[55]))
+					vector.append(float(row[57]))
+					vector.append(float(row[58]))
+					for i in range(67, 160):
+						vector.append(float(row[i]))
+					vector.append(float(row[171]))
+					vector.append(float(row[167]))
 				elif feature_set == "comb":
 					for i in range(23, 41):
 						vector.append(float(row[i]))
 					vector.append(round((sum_up(vector)) / float(row[17]), 4))
 					for i in range(41, 59):
 						vector.append(float(row[i]))
+					for i in range(67, 160):
+						vector.append(float(row[i]))
+					vector.append(float(row[171]))
+					vector.append(float(row[167]))
+				elif feature_set == "comb_uner_best_freq":
+					for i in range(23, 41):
+						vector.append(float(row[i]))
+					vector.append(round((sum_up(vector)) / float(row[17]), 4))
+					vector.append(float(row[41]))
+					vector.append(float(row[43]))
+					vector.append(float(row[52]))
+					vector.append(float(row[53]))
+					vector.append(float(row[55]))
+					vector.append(float(row[57]))
+					vector.append(float(row[58]))
 					for i in range(67, 160):
 						vector.append(float(row[i]))
 					vector.append(float(row[171]))
@@ -165,9 +200,11 @@ def main3(k):
 	atts = [
 		["NER", "ner"],
 		["Unique NER", "uner"],
+		["Unique NER Best Freq", "uner_best_freq"],
 		["LIWC", "liwc"],
 		["NER + LIWC", "nerliwc"],
 		["Unique NER + LIWC", "unerliwc"],
+		["Unique NER Best Freq + LIWC", "uner_best_freq_liwc"],
 		["NER + Unique NER + LIWC", "comb"]
 	]
 	inner_atts = [
