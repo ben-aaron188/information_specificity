@@ -21,9 +21,9 @@ def sum_up(list):
 # Data retrieval and pre-processing.
 #
 # Parameters:
-# path {String} -> path leading to csv data file;
+# path {String} -> path leading to csv data file
 # feature_set {String} -> the feature set description that should be included (see descriptions below)
-# pol {Integer} -> the polarity the data is filtered on (truhtful = 1, deceptive = 0)
+# pol {Integer} -> the polarity the data is filtered on (truthful = 1, deceptive = 0)
 def get_data(path, feature_set, pol):
 	features = []
 
@@ -144,32 +144,47 @@ def get_train_data(folds, x):
 	return X_train, C_train
 
 
-# K-fold cross-validation implementation
+# K-fold cross-validation implementation for mixed polarities
 #
 # Parameters:
-# X {List} -> feature array
-# C {List} -> corresponding class array
 # k {Integer} -> k
-# classifier {Sklearn Object} -> selected classifier
-def k_fold(X, C, k, classifier):
-	size = int(len(X) / k)
-	folds = []
+# pol {Integer} -> Train data polarity
+# feature_set {String} -> Selected feature set
+# path {String} -> path leading to csv data file;
+def pn_fold(k, classifier, pol, feature_set, path):
 	accuracy = 0
+	folds = []
+	precision_array_0 = []
+	recall_array_0 = []
+	f1_array_0 = []
+	precision_array_1 = []
+	recall_array_1 = []
+	f1_array_1 = []
+	X_test, C_test = get_data(path, feature_set, 1 - pol)
+	size = int(len(X_test) / k)
 
 	for i in range(0, k):
-		folds.append([X[i * size:(i + 1) * size], C[i * size:(i + 1) * size]])
+		folds.append([X_test[(i * size):(i + 1) * size], C_test[(i * size):(i + 1) * size]])
 
 	for x in range(0, len(folds)):
-		X_train, C_train = get_train_data(folds, x)
-		X_test = folds[x][0]
-		C_test = folds[x][1]
-		trained = classifier.fit(X_train, C_train)
-		accuracy = accuracy + compute_acc(C_test, trained.predict(X_test))
+		X_train, C_train = get_data(path, feature_set, pol)
 
-	return accuracy / k
+		trained = classifier.fit(X_train[0:size * (k - 1)], C_train[0:size * (k - 1)])
+		predicted = trained.predict(folds[x][0])
+		accuracy = accuracy + compute_acc(folds[x][1], predicted)
+		eval_metrics = precision_recall_fscore_support(folds[x][1], predicted)
+		precision_array_0.append(eval_metrics[0][0])
+		precision_array_1.append(eval_metrics[0][1])
+		recall_array_0.append(eval_metrics[1][0])
+		recall_array_1.append(eval_metrics[1][1])
+		f1_array_0.append(eval_metrics[2][0])
+		f1_array_1.append(eval_metrics[2][1])
+
+	calculate_results(precision_array_0, precision_array_1, recall_array_0, recall_array_1, f1_array_0, f1_array_1,
+	                  accuracy / k)
 
 
-# K-fold cross-validation implementation
+# K-fold cross-validation implementation for one polarity
 #
 # Parameters:
 # k {Integer} -> k
@@ -177,11 +192,7 @@ def k_fold(X, C, k, classifier):
 # X_proxy {List} -> feature array
 # C_proxy {List} -> corresponding classes
 def manual_cross_val(k, classifier_name, X_proxy, C_proxy):
-	# define classifiers
-	rf = RandomForestClassifier(n_estimators=200, criterion='entropy')
-	lsvc = LinearSVC(penalty="l1", dual=False, tol=1e-3)
-	lr = LogisticRegression()
-
+	accuracy = 0
 	X_ = np.array(X_proxy)
 	C_ = np.array(C_proxy)
 	kf = cross_validation.KFold(len(X_), n_folds=k, shuffle=True, random_state=42)
@@ -196,36 +207,45 @@ def manual_cross_val(k, classifier_name, X_proxy, C_proxy):
 		X_train, X_test = X_[train_index], X_[test_index]
 		y_train, y_test = C_[train_index], C_[test_index]
 
-		if classifier_name == "rf":
-			classifier_fit = rf.fit(X_train, y_train)
-		elif classifier_name == "lsvc":
-			classifier_fit = lsvc.fit(X_train, y_train)
-		elif classifier_name == "lr":
-			classifier_fit = lr.fit(X_train, y_train)
-
-		eval_metrics = precision_recall_fscore_support(y_test, classifier_fit.predict(X_test))
+		classifier_fit = classifier_name.fit(X_train, y_train)
+		predicted = classifier_fit.predict(X_test)
+		eval_metrics = precision_recall_fscore_support(y_test, predicted)
 		precision_array_0.append(eval_metrics[0][0])
 		precision_array_1.append(eval_metrics[0][1])
 		recall_array_0.append(eval_metrics[1][0])
 		recall_array_1.append(eval_metrics[1][1])
 		f1_array_0.append(eval_metrics[2][0])
 		f1_array_1.append(eval_metrics[2][1])
+		accuracy = accuracy + compute_acc(y_test, predicted)
 
-	p_c0_np = np.array(precision_array_0)
-	p_c1_np = np.array(precision_array_1)
-	r_c0_np = np.array(recall_array_0)
-	r_c1_np = np.array(recall_array_1)
-	f1_c0_np = np.array(f1_array_0)
-	f1_c1_np = np.array(f1_array_1)
-	accuracy_cross_val_score = cross_validation.cross_val_score(classifier_fit, X_, C_, cv=k, scoring='accuracy')
-	accuracy_avg_score = round(accuracy_cross_val_score.mean() * 100, 2)
+	calculate_results(precision_array_0, precision_array_1, recall_array_0, recall_array_1, f1_array_0, f1_array_1,
+	                  accuracy / k)
+
+
+# Prints CV results
+#
+# Parameters:
+# pa0 {List} -> Deceptive precision
+# pa1 {List} -> Truthful precision
+# ra0 {List} -> Deceptive recall
+# ra1 {List} -> Truthful recall
+# f10 {List} -> Deceptive f1
+# f11 {List} -> Truthful f1
+# acc {float} -> Accuracy
+def calculate_results(pa0, pa1, ra0, ra1, f10, f11, acc):
+	p_c0_np = np.array(pa0)
+	p_c1_np = np.array(pa1)
+	r_c0_np = np.array(ra0)
+	r_c1_np = np.array(ra1)
+	f1_c0_np = np.array(f10)
+	f1_c1_np = np.array(f11)
 	print("Precision class0: " + str(round(p_c0_np.mean() * 100, 2)))
 	print("Precision class1: " + str(round(p_c1_np.mean() * 100, 2)))
 	print("Recall class0: " + str(round(r_c0_np.mean() * 100, 2)))
 	print("Recall class1: " + str(round(r_c1_np.mean() * 100, 2)))
 	print("F1 class0: " + str(round(f1_c0_np.mean() * 100, 2)))
 	print("F1 class1: " + str(round(f1_c1_np.mean() * 100, 2)))
-	print("Accuracy: " + str(accuracy_avg_score))
+	print("Accuracy: " + str(round(acc * 100, 2)))
 
 
 # Main-method
@@ -247,22 +267,55 @@ def main(k):
 		["Positive", 1]
 	]
 
+	crossed = [
+		["Negative -> Positive", 0],
+		["Positive -> Negative", 1],
+	]
+
+	path = "inf_spec_ner_liwc_speciteller.csv"
+
+	rf = RandomForestClassifier(n_estimators=200, criterion='entropy')
+	svc = LinearSVC(penalty="l1", dual=False, tol=1e-3)
+	lr = LogisticRegression()
+
 	for feature_set in feature_sets:
 		print(feature_set[0])
 		for polarity in polarities:
 			print(polarity[0])
-			X, C = get_data("inf_spec_ner_liwc_speciteller.csv", feature_set[1], polarity[1])
+			X, C = get_data(path, feature_set[1], polarity[1])
 
 			# run k-fold cv
 			print("--------- RF --------")
-			manual_cross_val(k, "rf", X, C)
+			manual_cross_val(k, rf, X, C)
 			print("")
 			print("-------------------------------------------------------")
 			print("--------- SVM --------")
-			manual_cross_val(k, "lsvc", X, C)
+			manual_cross_val(k, svc, X, C)
 			print("")
 			print("-------------------------------------------------------")
 			print("--------- Log Reg --------")
-			manual_cross_val(k, "lr", X, C)
+			manual_cross_val(k, lr, X, C)
+			print("")
+			print("-------------------------------------------------------")
+
+	print("============================================================")
+
+	for feature_set in feature_sets:
+		print(feature_set[0])
+
+		for cross in crossed:
+			print(cross[0])
+
+			# run k-fold cv
+			print("--------- RF --------")
+			pn_fold(k, rf, cross[1], feature_set[1], path)
+			print("")
+			print("-------------------------------------------------------")
+			print("--------- SVM --------")
+			pn_fold(k, svc, cross[1], feature_set[1], path)
+			print("")
+			print("-------------------------------------------------------")
+			print("--------- Log Reg --------")
+			pn_fold(k, lr, cross[1], feature_set[1], path)
 			print("")
 			print("-------------------------------------------------------")
