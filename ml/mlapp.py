@@ -36,39 +36,30 @@ def get_data(path, feature_set, pol):
 
 			if polarity == pol:
 
-				# NER feature set
+				# NER
 				if feature_set == "ner":
-					for i in range(23, 41):
-						vector.append(float(row[i]))
-
-					vector.append(round((sum_up(vector)) / float(row[17]), 4))
-
-				# Unique NER feature set
-				elif feature_set == "uner":
 					for i in range(41, 59):
 						vector.append(float(row[i]))
 
 					vector.append(float(row[171]))
 
-				# LIWC feature set
+				# NER Best Freq.
+				elif feature_set == "nerbf":
+					vector.append(float(row[41]))
+					vector.append(float(row[43]))
+					vector.append(float(row[52]))
+					vector.append(float(row[53]))
+					vector.append(float(row[55]))
+					vector.append(float(row[57]))
+					vector.append(float(row[58]))
+
+				# LIWC
 				elif feature_set == "liwc":
 					for i in range(67, 160):
 						vector.append(float(row[i]))
 
-				# LIWC + NER feature set combination
+				# LIWC + NER
 				elif feature_set == "nerliwc":
-					for i in range(23, 41):
-						vector.append(float(row[i]))
-
-					vector.append(round((sum_up(vector)) / float(row[17]), 4))
-
-					for i in range(67, 160):
-						vector.append(float(row[i]))
-
-					vector.append(float(row[167]))
-
-				# LIWC + unique NER feature set combination
-				elif feature_set == "unerliwc":
 					for i in range(41, 59):
 						vector.append(float(row[i]))
 
@@ -78,21 +69,36 @@ def get_data(path, feature_set, pol):
 					vector.append(float(row[171]))
 					vector.append(float(row[167]))
 
-				# NER + unique NER + LIWC feature set combination
-				elif feature_set == "comb":
-					for i in range(23, 41):
-						vector.append(float(row[i]))
-
-					vector.append(round((sum_up(vector)) / float(row[17]), 4))
-
-					for i in range(41, 59):
-						vector.append(float(row[i]))
+				# LIWC + NER Best Freq.
+				elif feature_set == "liwcnerbf":
+					vector.append(float(row[41]))
+					vector.append(float(row[43]))
+					vector.append(float(row[52]))
+					vector.append(float(row[53]))
+					vector.append(float(row[55]))
+					vector.append(float(row[57]))
+					vector.append(float(row[58]))
 
 					for i in range(67, 160):
 						vector.append(float(row[i]))
 
+				# LIWC + NER + NER Best Freq.
+				elif feature_set == "liwcnernerbf":
+					vector.append(float(row[41]))
+					vector.append(float(row[43]))
+					vector.append(float(row[52]))
+					vector.append(float(row[53]))
+					vector.append(float(row[55]))
+					vector.append(float(row[57]))
+					vector.append(float(row[58]))
+
+					for i in range(67, 160):
+						vector.append(float(row[i]))
+
+					for i in range(41, 59):
+						vector.append(float(row[i]))
+
 					vector.append(float(row[171]))
-					vector.append(float(row[167]))
 
 				# add the class for each vector
 				features.append([vector, veracity])
@@ -255,11 +261,11 @@ def calculate_results(pa0, pa1, ra0, ra1, f10, f11, acc):
 def main(k):
 	feature_sets = [
 		["NER", "ner"],
-		["Unique NER", "uner"],
+		["NER Best Freq.", "nerbf"],
 		["LIWC", "liwc"],
 		["NER + LIWC", "nerliwc"],
-		["Unique NER + LIWC", "unerliwc"],
-		["NER + Unique NER + LIWC", "comb"]
+		["NER Best Freq. + LIWC", "liwcnerbf"],
+		["NER + NER Best Freq. + LIWC", "liwcnernerbf"]
 	]
 
 	polarities = [
@@ -319,3 +325,4 @@ def main(k):
 			pn_fold(k, lr, cross[1], feature_set[1], path)
 			print("")
 			print("-------------------------------------------------------")
+
