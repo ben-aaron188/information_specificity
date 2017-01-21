@@ -29,19 +29,32 @@ data$filename_norm = str_extract(data$filename, '_(.+)\\d')
 tapply(data$nwords, list(data$polarity_str, data$veracity_str), mean)
 tapply(data$nwords, list(data$polarity_str, data$veracity_str), sd)
 
-#ner unique proportion
+
+#set variables
 data$ner_unique_prop = (data$ner_unique/data$nwords)*100
+data$st_spec = round(data$spec_avg*100, 2)
+data$liwc_detailedness = data$percept + data$time + data$space
+data$ner_unique_verif_prop = (data$nperson_unique + data$nfac_unique + data$ngpe_unique + data$nloc_unique + data$norg_unique + data$nevent_unique + data$ndate_unique + data$ntime_unique + data$nmoney_unique)/data$nwords*100
+data$ner_unique_zerocounts_prop = (data$nperson_unique + data$nfac_unique + data$ndate_unique + data$ntime_unique + data$nmoney_unique + data$nordinal_unique + data$ncardinal_unique)/data$nwords*100
+
+#split data per polarity for follow-ups
+data_pos = data[data$polarity_str == 'positive',]
+data_neg = data[data$polarity_str == 'negative',]
+
+#ner unique proportion
 tapply(data$ner_unique_prop, list(data$polarity_str, data$veracity_str), mean)
 tapply(data$ner_unique_prop, list(data$polarity_str, data$veracity_str), sd)
+
+which.max(data$ner_unique_prop)
 
 aov_ner_unique_prop <- ezANOVA(
   data = data
   , dv = ner_unique_prop
-  #, wid = originalpath.x
-  , wid = filename_norm
-  , within = .(polarity_str, veracity_str)
+  , wid = originalpath.x
+  #, wid = filename_norm
+  #, within = .(polarity_str, veracity_str)
   , within_covariates = NULL
-  #, between = .(polarity_str, veracity_str)
+  , between = .(polarity_str, veracity_str)
   #, between = .(veracity_str)
   , between_covariates = NULL
   , observed = NULL
@@ -54,21 +67,20 @@ aov_ner_unique_prop <- ezANOVA(
 )
 aov_ner_unique_prop
 
-cohensf(96.35, 1, 399)
-cohensf(138.35, 1, 399)
-cohensf(4.85, 1, 399)
+cohensf(97.44, 1, 1596)
+cohensf(137.95, 1, 1596)
+cohensf(4.65, 1, 1596)
 
 
-data_pos = data[data$polarity_str == 'positive',]
 aov_ner_unique_prop_POS <- ezANOVA(
   data = data_pos
   , dv = ner_unique_prop
-  #, wid = originalpath.x
-  , wid = filename_norm
-  , within = .(veracity_str)
+  , wid = originalpath.x
+  #, wid = filename_norm
+  #, within = .(veracity_str)
   , within_covariates = NULL
   #, between = .(polarity_str, veracity_str)
-  #, between = .(veracity_str)
+  , between = .(veracity_str)
   , between_covariates = NULL
   , observed = NULL
   , diff = NULL
@@ -79,18 +91,17 @@ aov_ner_unique_prop_POS <- ezANOVA(
   , return_aov = T
 )
 aov_ner_unique_prop_POS
-cohensf(79.15, 1, 399)
+cohensf(73.64, 1, 798)
 
-data_neg = data[data$polarity_str == 'negative',]
 aov_ner_unique_prop_NEG <- ezANOVA(
   data = data_neg
   , dv = ner_unique_prop
-  #, wid = originalpath.x
-  , wid = filename_norm
-  , within = .(veracity_str)
+  , wid = originalpath.x
+  #, wid = filename_norm
+  #, within = .(veracity_str)
   , within_covariates = NULL
   #, between = .(polarity_str, veracity_str)
-  #, between = .(veracity_str)
+  , between = .(veracity_str)
   , between_covariates = NULL
   , observed = NULL
   , diff = NULL
@@ -101,8 +112,8 @@ aov_ner_unique_prop_NEG <- ezANOVA(
   , return_aov = T
 )
 aov_ner_unique_prop_NEG
-cohensf(62.66, 1, 399)
-
+cohensf(63.63, 1, 798)
+?ezANOVA
 #ner unique sum
 tapply(data$ner_unique, list(data$polarity_str, data$veracity_str), mean)
 tapply(data$ner_unique, list(data$polarity_str, data$veracity_str), sd)
@@ -314,19 +325,15 @@ aov_ner_NEG
 cohensf(50.33, 1, 399)
 
 #speciteller
-data$st_spec = round(data$spec_avg*100, 2)
 tapply(data$st_spec, list(data$polarity_str, data$veracity_str), mean)
 tapply(data$st_spec, list(data$polarity_str, data$veracity_str), sd)
 
 aov_speciteller <- ezANOVA(
   data = data
   , dv = st_spec
-  #, wid = originalpath.x
-  , wid = filename_norm
-  , within = .(polarity_str, veracity_str)
+  , wid = originalpath.x
   , within_covariates = NULL
-  #, between = .(polarity_str, veracity_str)
-  #, between = .(veracity_str)
+  , between = .(polarity_str, veracity_str)
   , between_covariates = NULL
   , observed = NULL
   , diff = NULL
@@ -338,19 +345,16 @@ aov_speciteller <- ezANOVA(
 )
 aov_speciteller
 
-cohensf(34.18, 1, 399)
-cohensf(1.44, 1, 399)
-cohensf(0.08, 1, 399)
+cohensf(32.44, 1, 1596)
+cohensf(1.37, 1, 1596)
+cohensf(0.08, 1, 1596)
 
 aov_speciteller_POS <- ezANOVA(
   data = data_pos
   , dv = st_spec
-  #, wid = originalpath.x
-  , wid = filename_norm
-  , within = .(veracity_str)
+  , wid = originalpath.x
   , within_covariates = NULL
-  #, between = .(polarity_str, veracity_str)
-  #, between = .(veracity_str)
+  , between = .(veracity_str)
   , between_covariates = NULL
   , observed = NULL
   , diff = NULL
@@ -361,18 +365,15 @@ aov_speciteller_POS <- ezANOVA(
   , return_aov = T
 )
 aov_speciteller_POS
-cohensf(15.02, 1, 399)
+cohensf(15.72, 1, 798)
 
 
 aov_speciteller_NEG <- ezANOVA(
   data = data_neg
   , dv = st_spec
-  #, wid = originalpath.x
-  , wid = filename_norm
-  , within = .(veracity_str)
+  , wid = originalpath.x
   , within_covariates = NULL
-  #, between = .(polarity_str, veracity_str)
-  #, between = .(veracity_str)
+  , between = .(veracity_str)
   , between_covariates = NULL
   , observed = NULL
   , diff = NULL
@@ -383,23 +384,19 @@ aov_speciteller_NEG <- ezANOVA(
   , return_aov = T
 )
 aov_speciteller_NEG
-cohensf(16.79, 1, 399)
+cohensf(16.99, 1, 798)
 
 
 #liwc comp
-data$liwc_detailedness = data$percept + data$time + data$space
 tapply(data$liwc_detailedness, list(data$polarity_str, data$veracity_str), mean)
 tapply(data$liwc_detailedness, list(data$polarity_str, data$veracity_str), sd)
 
 aov_liwc_detailedness <- ezANOVA(
   data = data
   , dv = liwc_detailedness
-  #, wid = originalpath.x
-  , wid = filename_norm
-  , within = .(polarity_str, veracity_str)
+  , wid = originalpath.x
   , within_covariates = NULL
-  #, between = .(polarity_str, veracity_str)
-  #, between = .(veracity_str)
+  , between = .(polarity_str, veracity_str)
   , between_covariates = NULL
   , observed = NULL
   , diff = NULL
@@ -411,19 +408,16 @@ aov_liwc_detailedness <- ezANOVA(
 )
 aov_liwc_detailedness
 
-cohensf(6.48, 1, 399)
-cohensf(2.46, 1, 399)
-cohensf(6.30, 1, 399)
+cohensf(7.32, 1, 1596)
+cohensf(2.36, 1, 1596)
+cohensf(5.93, 1, 1596)
 
 aov_liwc_detailedness_POS <- ezANOVA(
   data = data_pos
   , dv = liwc_detailedness
-  #, wid = originalpath.x
-  , wid = filename_norm
-  , within = .(veracity_str)
+  , wid = originalpath.x
   , within_covariates = NULL
-  #, between = .(polarity_str, veracity_str)
-  #, between = .(veracity_str)
+  , between = .(veracity_str)
   , between_covariates = NULL
   , observed = NULL
   , diff = NULL
@@ -434,17 +428,16 @@ aov_liwc_detailedness_POS <- ezANOVA(
   , return_aov = T
 )
 aov_liwc_detailedness_POS
-cohensf(12.25, 1, 399)
+cohensf(12.85, 1, 798)
+cohensf(12.25, 1, 798)
+
 
 aov_liwc_detailedness_NEG <- ezANOVA(
   data = data_neg
   , dv = liwc_detailedness
-  #, wid = originalpath.x
-  , wid = filename_norm
-  , within = .(veracity_str)
+  , wid = originalpath.x
   , within_covariates = NULL
-  #, between = .(polarity_str, veracity_str)
-  #, between = .(veracity_str)
+  , between = .(veracity_str)
   , between_covariates = NULL
   , observed = NULL
   , diff = NULL
@@ -455,7 +448,7 @@ aov_liwc_detailedness_NEG <- ezANOVA(
   , return_aov = T
 )
 aov_liwc_detailedness_NEG
-cohensf(0.04, 1, 399)
+cohensf(0.04, 1, 798)
 
 ###AUC
 library(pROC)
@@ -549,20 +542,16 @@ roc.test(a, c)
 names(data)
 
 #select only verifiable ones
-data$ner_unique_verif_prop = (data$nperson_unique + data$nfac_unique + data$ngpe_unique + data$nloc_unique + data$norg_unique + data$nevent_unique + data$ndate_unique + data$ntime_unique + data$nmoney_unique)/data$nwords*100
-
 tapply(data$ner_unique_verif_prop, list(data$polarity_str, data$veracity_str), mean)
 tapply(data$ner_unique_verif_prop, list(data$polarity_str, data$veracity_str), sd)
 
 aov_ner_unique_verif_prop <- ezANOVA(
   data = data
   , dv = ner_unique_verif_prop
-  #, wid = originalpath.x
-  , wid = filename_norm
-  , within = .(polarity_str, veracity_str)
+  , wid = originalpath.x
+  , within = NULL
   , within_covariates = NULL
-  #, between = .(polarity_str, veracity_str)
-  #, between = .(veracity_str)
+  , between = .(polarity_str, veracity_str)
   , between_covariates = NULL
   , observed = NULL
   , diff = NULL
@@ -574,19 +563,16 @@ aov_ner_unique_verif_prop <- ezANOVA(
 )
 aov_ner_unique_verif_prop
 
-cohensf(76.48, 1, 399)
-cohensf(146.41, 1, 399)
-cohensf(13.94, 1, 399)
+cohensf(72.11, 1, 1596)
+cohensf(155.11, 1, 1596)
+cohensf(13.25, 1, 1596)
 
 aov_ner_unique_verif_prop_POS <- ezANOVA(
   data = data_pos
   , dv = ner_unique_verif_prop
-  #, wid = originalpath.x
-  , wid = filename_norm
-  , within = .(veracity_str)
+  , wid = originalpath.x
   , within_covariates = NULL
-  #, between = .(polarity_str, veracity_str)
-  #, between = .(veracity_str)
+  , between = .(veracity_str)
   , between_covariates = NULL
   , observed = NULL
   , diff = NULL
@@ -597,18 +583,15 @@ aov_ner_unique_verif_prop_POS <- ezANOVA(
   , return_aov = T
 )
 aov_ner_unique_verif_prop_POS
-cohensf(56.99, 1, 399)
+cohensf(53.01, 1, 798)
 
 
 aov_ner_unique_verif_prop_NEG <- ezANOVA(
   data = data_neg
   , dv = ner_unique_verif_prop
-  #, wid = originalpath.x
-  , wid = filename_norm
-  , within = .(veracity_str)
+  , wid = originalpath.x
   , within_covariates = NULL
-  #, between = .(polarity_str, veracity_str)
-  #, between = .(veracity_str)
+  , between = .(veracity_str)
   , between_covariates = NULL
   , observed = NULL
   , diff = NULL
@@ -619,7 +602,7 @@ aov_ner_unique_verif_prop_NEG <- ezANOVA(
   , return_aov = T
 )
 aov_ner_unique_verif_prop_NEG
-cohensf(19.54, 1, 399)
+cohensf(19.24, 1, 798)
 
 #check on zero counts
 apply(data[,c(42:59)], 2, function(x){
@@ -630,20 +613,16 @@ apply(data[,c(42:59)], 2, function(x){
   tapply(x, list(data$polarity_str, data$veracity_str), mean)*100
 })
 
-data$ner_unique_zerocounts_prop = (data$nperson_unique + data$nfac_unique + data$ndate_unique + data$ntime_unique + data$nmoney_unique + data$nordinal_unique + data$ncardinal_unique)/data$nwords*100
-
 tapply(data$ner_unique_zerocounts_prop, list(data$polarity_str, data$veracity_str), mean)
 tapply(data$ner_unique_zerocounts_prop, list(data$polarity_str, data$veracity_str), sd)
 
 aov_ner_unique_zerocounts_prop <- ezANOVA(
   data = data
   , dv = ner_unique_zerocounts_prop
-  #, wid = originalpath.x
-  , wid = filename_norm
-  , within = .(polarity_str, veracity_str)
+  , wid = originalpath.x
+  , within = NULL
   , within_covariates = NULL
-  #, between = .(polarity_str, veracity_str)
-  #, between = .(veracity_str)
+  , between = .(polarity_str, veracity_str)
   , between_covariates = NULL
   , observed = NULL
   , diff = NULL
@@ -655,19 +634,16 @@ aov_ner_unique_zerocounts_prop <- ezANOVA(
 )
 aov_ner_unique_zerocounts_prop
 
-cohensf(209.72, 1, 399)
-cohensf(10.22, 1, 399)
-cohensf(3.75, 1, 399)
+cohensf(219.44, 1, 1596)
+cohensf(9.80, 1, 1596)
+cohensf(3.57, 1, 1596)
 
 aov_ner_unique_zerocounts_prop_POS <- ezANOVA(
   data = data_pos
   , dv = ner_unique_zerocounts_prop
-  #, wid = originalpath.x
-  , wid = filename_norm
-  , within = .(veracity_str)
+  , wid = originalpath.x
   , within_covariates = NULL
-  #, between = .(polarity_str, veracity_str)
-  #, between = .(veracity_str)
+  , between = .(veracity_str)
   , between_covariates = NULL
   , observed = NULL
   , diff = NULL
@@ -678,18 +654,15 @@ aov_ner_unique_zerocounts_prop_POS <- ezANOVA(
   , return_aov = T
 )
 aov_ner_unique_zerocounts_prop_POS
-cohensf(135.53, 1, 399)
+cohensf(132.05, 1, 798)
 
 
 aov_ner_unique_zerocounts_prop_NEG <- ezANOVA(
   data = data_neg
   , dv = ner_unique_zerocounts_prop
-  #, wid = originalpath.x
-  , wid = filename_norm
-  , within = .(veracity_str)
+  , wid = originalpath.x
   , within_covariates = NULL
-  #, between = .(polarity_str, veracity_str)
-  #, between = .(veracity_str)
+  , between = .(veracity_str)
   , between_covariates = NULL
   , observed = NULL
   , diff = NULL
@@ -700,9 +673,17 @@ aov_ner_unique_zerocounts_prop_NEG <- ezANOVA(
   , return_aov = T
 )
 aov_ner_unique_zerocounts_prop_NEG
-cohensf(83.50, 1, 399)
+cohensf(87.41, 1, 798)
 
 
+which.max(data$ner_unique_prop)
+which.max(data$ner_unique_verif_prop)
+which.max(data$ner_unique_zerocounts_prop)
+max(data$ner_unique_zerocounts_prop)
+min(data$ner_unique_zerocounts_prop)
+which.min(data$ner_unique_zerocounts_prop)
+View(data[data$ner_unique_zerocounts_prop > 5,])
+View(data[data$filename == 'd_hyatt_20.txt', ])
 #write to csv for ML in python
 # write.csv(data
 #           , file='inf_spec_ner_liwc_speciteller.csv'
@@ -710,6 +691,69 @@ cohensf(83.50, 1, 399)
 #           , row.names = F
 #           , col.names = T
 # )
+
+
+###check for NER types individually
+data_pos = data[data$polarity_str == 'positive',]
+data_neg = data[data$polarity_str == 'negative',]
+
+names(data)
+
+aov_ner_unique_PER_NER_TYPE <- ezANOVA(
+  data = data
+  , dv = nordinal_unique
+  , wid = originalpath.x
+  , within = NULL
+  , within_covariates = NULL
+  , between = .(polarity_str, veracity_str)
+  , between_covariates = NULL
+  , observed = NULL
+  , diff = NULL
+  , reverse_diff = FALSE
+  , type = 3
+  , white.adjust = FALSE
+  , detailed = FALSE
+  , return_aov = T
+)
+
+aov_ner_unique_PER_NER_TYPE_pos <- ezANOVA(
+  data = data_pos
+  , dv = nordinal_unique
+  , wid = originalpath.x
+  , within_covariates = NULL
+  , between = .(veracity_str)
+  , between_covariates = NULL
+  , observed = NULL
+  , diff = NULL
+  , reverse_diff = FALSE
+  , type = 3
+  , white.adjust = FALSE
+  , detailed = FALSE
+  , return_aov = T
+)
+
+aov_ner_unique_PER_NER_TYPE_neg <- ezANOVA(
+  data = data_neg
+  , dv = nordinal_unique
+  , wid = originalpath.x
+  , within_covariates = NULL
+  , between = .(veracity_str)
+  , between_covariates = NULL
+  , observed = NULL
+  , diff = NULL
+  , reverse_diff = FALSE
+  , type = 3
+  , white.adjust = FALSE
+  , detailed = FALSE
+  , return_aov = T
+)
+
+aov_ner_unique_PER_NER_TYPE
+cohensf(29.55, 1, 1596)
+aov_ner_unique_PER_NER_TYPE_pos
+cohensf(21.56, 1, 798)
+aov_ner_unique_PER_NER_TYPE_neg
+cohensf(11.42, 1, 798)
 
 
 ###refinement
