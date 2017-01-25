@@ -760,18 +760,23 @@ round(tapply(data$WC, list(data$polarity_str, data$veracity_str), mean), 2)
 #[,1] --> negative truthful
 
 #apply(data[,c(68:161)], 2, function(x){
-apply(data[,c(68:70)], 2, function(x){
-  aggr_table = round(tapply(x, list(data$polarity_str, data$veracity_str), mean), 2)
-  generic_anova = summary(aov(x ~ data$polarity_str*data$veracity_str))
+set.seed(42)
+df = data.frame('x1' = rnorm(100),
+                'x2' = rnorm(100))
 
-  #avoid printing?
-
-  #get F values
-
-  #get cohen's F
-
-  #for positive and negative?
-
+apply(df[,c(1:2)], 2, function(x){
+  mymean = mean(x)
+  mysd = sd(x)
+  return(list(mymean, mysd))
 })
 
+
+#overall (irrespective of polarity)
+apply(data[,c(68:70)], 2, function(x){
+  aggr_table = round(tapply(x, list(data$polarity_str, data$veracity_str), mean), 2)
+  summ_aov = summary(aov(x ~ data$polarity_str*data$veracity_str))
+  F_value = summ_aov[[1]][["F value"]][1]
+  effect_size = cohensf(F_value, 1, 1596)
+  return(list(aggr_table, summ_aov, effect_size))
+})
 
