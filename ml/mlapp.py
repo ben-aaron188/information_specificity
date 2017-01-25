@@ -55,7 +55,8 @@ def get_data(path, feature_set, pol):
 
 				# LIWC
 				elif feature_set == "liwc":
-					for i in range(67, 160):
+					# for i in range(67, 160):
+					for i in range(68, 160):
 						vector.append(float(row[i]))
 
 				# LIWC + NER
@@ -63,7 +64,8 @@ def get_data(path, feature_set, pol):
 					for i in range(41, 59):
 						vector.append(float(row[i]))
 
-					for i in range(67, 160):
+					# for i in range(67, 160):
+					for i in range(68, 160):
 						vector.append(float(row[i]))
 
 					vector.append(float(row[171]))
@@ -79,7 +81,8 @@ def get_data(path, feature_set, pol):
 					vector.append(float(row[57]))
 					vector.append(float(row[58]))
 
-					for i in range(67, 160):
+					# for i in range(67, 160):
+					for i in range(68, 160):
 						vector.append(float(row[i]))
 
 				# LIWC + NER + NER Best Freq.
@@ -92,7 +95,8 @@ def get_data(path, feature_set, pol):
 					vector.append(float(row[57]))
 					vector.append(float(row[58]))
 
-					for i in range(67, 160):
+					# for i in range(67, 160):
+					for i in range(68, 160):
 						vector.append(float(row[i]))
 
 					for i in range(41, 59):
@@ -325,4 +329,3 @@ def main(k):
 			pn_fold(k, lr, cross[1], feature_set[1], path)
 			print("")
 			print("-------------------------------------------------------")
-
