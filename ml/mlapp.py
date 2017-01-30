@@ -6,9 +6,6 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import precision_recall_fscore_support
 
-# Set random seed
-random.seed(1337)
-
 
 # Sums up the values of an array.
 #
@@ -110,6 +107,7 @@ def get_data(path, feature_set, pol):
 				# add the class for each vector
 				features.append([vector, veracity])
 
+	random.seed(42)
 	random.shuffle(features)
 
 	# feature array
@@ -332,4 +330,3 @@ def main(k):
 			pn_fold(k, lr, cross[1], feature_set[1], path)
 			print("")
 			print("-------------------------------------------------------")
-
