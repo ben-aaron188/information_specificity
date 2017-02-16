@@ -55,8 +55,7 @@ def get_data(path, feature_set, pol):
 
 				# LIWC
 				elif feature_set == "liwc":
-					# for i in range(67, 160):
-					for i in range(68, 160):
+					for i in range(68, 161):
 						vector.append(float(row[i]))
 
 				# LIWC + NER
@@ -64,8 +63,7 @@ def get_data(path, feature_set, pol):
 					for i in range(41, 59):
 						vector.append(float(row[i]))
 
-					# for i in range(67, 160):
-					for i in range(68, 160):
+					for i in range(68, 161):
 						vector.append(float(row[i]))
 
 					vector.append(float(row[171]))
@@ -81,8 +79,7 @@ def get_data(path, feature_set, pol):
 					vector.append(float(row[57]))
 					vector.append(float(row[58]))
 
-					# for i in range(67, 160):
-					for i in range(68, 160):
+					for i in range(68, 161):
 						vector.append(float(row[i]))
 
 				# LIWC + NER + NER Best Freq.
@@ -95,8 +92,7 @@ def get_data(path, feature_set, pol):
 					vector.append(float(row[57]))
 					vector.append(float(row[58]))
 
-					# for i in range(67, 160):
-					for i in range(68, 160):
+					for i in range(68, 161):
 						vector.append(float(row[i]))
 
 					for i in range(41, 59):
@@ -107,8 +103,7 @@ def get_data(path, feature_set, pol):
 				# add the class for each vector
 				features.append([vector, veracity])
 
-	random.seed(42)
-	random.shuffle(features)
+	random.shuffle(features, lambda: 0.42)
 
 	# feature array
 	X = []
@@ -285,9 +280,9 @@ def main(k):
 
 	path = "inf_spec_ner_liwc_speciteller.csv"
 
-	rf = RandomForestClassifier(n_estimators=200, criterion='entropy')
-	svc = LinearSVC(penalty="l1", dual=False, tol=1e-3)
-	lr = LogisticRegression()
+	rf = RandomForestClassifier(n_estimators=200, criterion='entropy', random_state=42)
+	svc = LinearSVC(penalty="l1", dual=False, tol=1e-3, random_state=42)
+	lr = LogisticRegression(random_state=42)
 
 	for feature_set in feature_sets:
 		print(feature_set[0])
