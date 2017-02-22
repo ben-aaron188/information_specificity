@@ -1,378 +1,378 @@
 NER
 Negative
 --------- RF --------
-Precision class0: 61.75
-Precision class1: 62.81
-Recall class0: 63.46
-Recall class1: 60.97
-F1 class0: 62.22
-F1 class1: 61.47
-Accuracy: 62.0
+Precision class0: 62.78
+Precision class1: 63.73
+Recall class0: 64.88
+Recall class1: 61.63
+F1 class0: 63.68
+F1 class1: 62.52
+Accuracy: 63.12
 
 -------------------------------------------------------
 --------- SVM --------
-Precision class0: 61.75
-Precision class1: 66.23
-Recall class0: 71.36
-Recall class1: 55.98
-F1 class0: 65.89
-F1 class1: 60.28
-Accuracy: 63.38
+Precision class0: 62.65
+Precision class1: 67.11
+Recall class0: 72.33
+Recall class1: 56.69
+F1 class0: 66.97
+F1 class1: 61.21
+Accuracy: 64.38
 
 -------------------------------------------------------
 --------- Log Reg --------
-Precision class0: 62.0
-Precision class1: 65.66
-Recall class0: 69.84
-Recall class1: 57.35
-F1 class0: 65.39
-F1 class1: 60.85
-Accuracy: 63.38
+Precision class0: 62.67
+Precision class1: 65.95
+Recall class0: 70.31
+Recall class1: 57.92
+F1 class0: 66.13
+F1 class1: 61.49
+Accuracy: 64.0
 
 -------------------------------------------------------
 Positive
 --------- RF --------
-Precision class0: 64.21
-Precision class1: 64.84
-Recall class0: 65.75
-Recall class1: 63.53
-F1 class0: 64.87
-F1 class1: 64.08
-Accuracy: 64.62
+Precision class0: 63.0
+Precision class1: 62.87
+Recall class0: 62.7
+Recall class1: 63.22
+F1 class0: 62.84
+F1 class1: 63.03
+Accuracy: 63.0
 
 -------------------------------------------------------
 --------- SVM --------
-Precision class0: 66.49
-Precision class1: 72.44
-Recall class0: 76.94
-Recall class1: 61.44
-F1 class0: 71.23
-F1 class1: 66.41
-Accuracy: 69.12
+Precision class0: 65.61
+Precision class1: 73.18
+Recall class0: 78.06
+Recall class1: 59.25
+F1 class0: 71.15
+F1 class1: 65.29
+Accuracy: 68.5
 
 -------------------------------------------------------
 --------- Log Reg --------
-Precision class0: 66.72
-Precision class1: 72.07
-Recall class0: 76.21
-Recall class1: 62.18
-F1 class0: 71.04
-F1 class1: 66.67
-Accuracy: 69.12
+Precision class0: 66.01
+Precision class1: 71.59
+Recall class0: 75.5
+Recall class1: 61.25
+F1 class0: 70.3
+F1 class1: 65.84
+Accuracy: 68.25
 
 -------------------------------------------------------
 NER Best Freq.
 Negative
 --------- RF --------
-Precision class0: 57.71
-Precision class1: 61.15
-Recall class0: 68.22
-Recall class1: 50.13
-F1 class0: 62.31
-F1 class1: 54.85
-Accuracy: 59.0
+Precision class0: 57.73
+Precision class1: 60.11
+Recall class0: 66.73
+Recall class1: 50.75
+F1 class0: 61.74
+F1 class1: 54.8
+Accuracy: 58.62
 
 -------------------------------------------------------
 --------- SVM --------
 Precision class0: 60.74
-Precision class1: 65.66
-Recall class0: 72.06
-Recall class1: 53.59
-F1 class0: 65.71
-F1 class1: 58.76
-Accuracy: 62.62
+Precision class1: 66.2
+Recall class0: 73.63
+Recall class1: 52.15
+F1 class0: 66.41
+F1 class1: 58.08
+Accuracy: 62.75
 
 -------------------------------------------------------
 --------- Log Reg --------
-Precision class0: 60.78
-Precision class1: 65.1
-Recall class0: 71.0
-Recall class1: 54.33
+Precision class0: 60.6
+Precision class1: 64.68
+Recall class0: 71.01
+Recall class1: 53.62
 F1 class0: 65.3
-F1 class1: 59.0
-Accuracy: 62.5
+F1 class1: 58.49
+Accuracy: 62.25
 
 -------------------------------------------------------
 Positive
 --------- RF --------
-Precision class0: 61.1
-Precision class1: 69.5
-Recall class0: 77.8
-Recall class1: 50.58
-F1 class0: 68.4
-F1 class1: 58.51
-Accuracy: 64.38
+Precision class0: 59.48
+Precision class1: 66.61
+Recall class0: 75.0
+Recall class1: 49.1
+F1 class0: 66.18
+F1 class1: 56.27
+Accuracy: 61.88
 
 -------------------------------------------------------
 --------- SVM --------
-Precision class0: 64.08
-Precision class1: 72.04
-Recall class0: 78.62
-Recall class1: 56.03
-F1 class0: 70.49
-F1 class1: 62.91
-Accuracy: 67.25
+Precision class0: 62.84
+Precision class1: 71.82
+Recall class0: 78.69
+Recall class1: 53.56
+F1 class0: 69.73
+F1 class1: 61.13
+Accuracy: 66.0
 
 -------------------------------------------------------
 --------- Log Reg --------
-Precision class0: 64.15
-Precision class1: 70.62
-Recall class0: 76.47
-Recall class1: 57.27
-F1 class0: 69.6
-F1 class1: 63.02
-Accuracy: 66.75
+Precision class0: 64.19
+Precision class1: 71.93
+Recall class0: 77.93
+Recall class1: 56.31
+F1 class0: 70.19
+F1 class1: 62.88
+Accuracy: 67.0
 
 -------------------------------------------------------
 LIWC
 Negative
 --------- RF --------
-Precision class0: 74.39
-Precision class1: 75.89
-Recall class0: 76.38
-Recall class1: 73.97
-F1 class0: 75.2
-F1 class1: 74.72
-Accuracy: 75.12
+Precision class0: 76.55
+Precision class1: 78.13
+Recall class0: 78.42
+Recall class1: 75.87
+F1 class0: 77.4
+F1 class1: 76.88
+Accuracy: 77.25
 
 -------------------------------------------------------
 --------- SVM --------
-Precision class0: 73.47
-Precision class1: 74.4
-Recall class0: 75.18
-Recall class1: 72.78
-F1 class0: 74.27
-F1 class1: 73.55
-Accuracy: 74.12
+Precision class0: 75.63
+Precision class1: 76.41
+Recall class0: 77.05
+Recall class1: 74.98
+F1 class0: 76.26
+F1 class1: 75.62
+Accuracy: 76.0
 
 -------------------------------------------------------
 --------- Log Reg --------
-Precision class0: 73.31
-Precision class1: 74.3
-Recall class0: 75.26
-Recall class1: 72.48
-F1 class0: 74.24
-F1 class1: 73.35
-Accuracy: 74.0
+Precision class0: 76.5
+Precision class1: 76.73
+Recall class0: 77.09
+Recall class1: 76.18
+F1 class0: 76.74
+F1 class1: 76.41
+Accuracy: 76.63
 
 -------------------------------------------------------
 Positive
 --------- RF --------
-Precision class0: 76.59
-Precision class1: 79.34
-Recall class0: 80.39
-Recall class1: 75.72
-F1 class0: 78.27
-F1 class1: 77.28
-Accuracy: 77.88
-
--------------------------------------------------------
---------- SVM --------
-Precision class0: 78.81
-Precision class1: 78.99
-Recall class0: 79.56
-Recall class1: 78.45
-F1 class0: 79.01
-F1 class1: 78.52
+Precision class0: 77.64
+Precision class1: 80.37
+Recall class0: 81.33
+Recall class1: 76.66
+F1 class0: 79.34
+F1 class1: 78.35
 Accuracy: 78.88
 
 -------------------------------------------------------
+--------- SVM --------
+Precision class0: 77.96
+Precision class1: 80.36
+Recall class0: 81.32
+Recall class1: 76.93
+F1 class0: 79.57
+F1 class1: 78.57
+Accuracy: 79.12
+
+-------------------------------------------------------
 --------- Log Reg --------
-Precision class0: 79.97
-Precision class1: 78.89
-Recall class0: 79.05
-Recall class1: 79.97
-F1 class0: 79.3
-F1 class1: 79.22
-Accuracy: 79.38
+Precision class0: 78.6
+Precision class1: 79.69
+Recall class0: 80.0
+Recall class1: 78.27
+F1 class0: 79.24
+F1 class1: 78.91
+Accuracy: 79.12
 
 -------------------------------------------------------
 NER + LIWC
 Negative
 --------- RF --------
-Precision class0: 75.21
-Precision class1: 78.44
-Recall class0: 79.66
-Recall class1: 74.05
-F1 class0: 77.23
-F1 class1: 76.0
-Accuracy: 76.75
+Precision class0: 75.9
+Precision class1: 78.68
+Recall class0: 79.53
+Recall class1: 74.71
+F1 class0: 77.57
+F1 class1: 76.51
+Accuracy: 77.12
 
 -------------------------------------------------------
 --------- SVM --------
-Precision class0: 73.46
-Precision class1: 74.99
-Recall class0: 75.99
-Recall class1: 72.59
-F1 class0: 74.64
-F1 class1: 73.72
-Accuracy: 74.38
+Precision class0: 76.16
+Precision class1: 75.73
+Recall class0: 75.55
+Recall class1: 76.28
+F1 class0: 75.74
+F1 class1: 75.9
+Accuracy: 75.88
 
 -------------------------------------------------------
 --------- Log Reg --------
-Precision class0: 74.01
-Precision class1: 76.06
-Recall class0: 76.97
-Recall class1: 73.15
-F1 class0: 75.38
-F1 class1: 74.49
-Accuracy: 75.12
+Precision class0: 78.06
+Precision class1: 77.37
+Recall class0: 77.02
+Recall class1: 78.21
+F1 class0: 77.42
+F1 class1: 77.68
+Accuracy: 77.62
 
 -------------------------------------------------------
 Positive
 --------- RF --------
-Precision class0: 79.04
-Precision class1: 83.37
-Recall class0: 84.57
-Recall class1: 77.88
-F1 class0: 81.6
-F1 class1: 80.41
-Accuracy: 81.12
+Precision class0: 77.47
+Precision class1: 81.4
+Recall class0: 82.54
+Recall class1: 76.16
+F1 class0: 79.84
+F1 class1: 78.59
+Accuracy: 79.25
 
 -------------------------------------------------------
 --------- SVM --------
-Precision class0: 79.59
-Precision class1: 80.39
-Recall class0: 81.43
-Recall class1: 78.83
-F1 class0: 80.34
-F1 class1: 79.44
-Accuracy: 80.0
+Precision class0: 77.73
+Precision class1: 81.62
+Recall class0: 82.85
+Recall class1: 76.27
+F1 class0: 80.13
+F1 class1: 78.76
+Accuracy: 79.5
 
 -------------------------------------------------------
 --------- Log Reg --------
-Precision class0: 80.67
-Precision class1: 79.98
-Recall class0: 80.35
-Recall class1: 80.44
-F1 class0: 80.29
-F1 class1: 79.99
-Accuracy: 80.25
+Precision class0: 78.21
+Precision class1: 80.75
+Recall class0: 81.63
+Recall class1: 77.24
+F1 class0: 79.8
+F1 class1: 78.86
+Accuracy: 79.38
 
 -------------------------------------------------------
 NER Best Freq. + LIWC
 Negative
 --------- RF --------
-Precision class0: 75.45
-Precision class1: 77.14
-Recall class0: 77.62
-Recall class1: 74.99
-F1 class0: 76.33
-F1 class1: 75.87
-Accuracy: 76.25
+Precision class0: 76.61
+Precision class1: 79.57
+Recall class0: 80.84
+Recall class1: 75.14
+F1 class0: 78.61
+F1 class1: 77.23
+Accuracy: 78.0
 
 -------------------------------------------------------
 --------- SVM --------
-Precision class0: 74.39
-Precision class1: 76.13
-Recall class0: 76.98
-Recall class1: 73.75
-F1 class0: 75.59
-F1 class1: 74.85
-Accuracy: 75.37
+Precision class0: 76.24
+Precision class1: 75.87
+Recall class0: 75.77
+Recall class1: 76.32
+F1 class0: 75.91
+F1 class1: 76.0
+Accuracy: 76.0
 
 -------------------------------------------------------
 --------- Log Reg --------
-Precision class0: 74.32
-Precision class1: 76.19
-Recall class0: 77.15
-Recall class1: 73.3
-F1 class0: 75.64
-F1 class1: 74.65
-Accuracy: 75.37
+Precision class0: 77.39
+Precision class1: 77.99
+Recall class0: 78.27
+Recall class1: 77.01
+F1 class0: 77.73
+F1 class1: 77.4
+Accuracy: 77.62
 
 -------------------------------------------------------
 Positive
 --------- RF --------
-Precision class0: 78.15
-Precision class1: 81.39
-Recall class0: 82.44
-Recall class1: 77.22
-F1 class0: 80.04
-F1 class1: 79.01
+Precision class0: 78.02
+Precision class1: 81.43
+Recall class0: 82.61
+Recall class1: 76.82
+F1 class0: 80.19
+F1 class1: 78.99
 Accuracy: 79.62
 
 -------------------------------------------------------
 --------- SVM --------
-Precision class0: 78.78
-Precision class1: 79.96
-Recall class0: 81.07
-Recall class1: 77.8
-F1 class0: 79.75
-F1 class1: 78.7
-Accuracy: 79.38
+Precision class0: 78.0
+Precision class1: 80.59
+Recall class0: 81.61
+Recall class1: 76.92
+F1 class0: 79.72
+F1 class1: 78.67
+Accuracy: 79.25
 
 -------------------------------------------------------
 --------- Log Reg --------
-Precision class0: 78.98
-Precision class1: 79.45
-Recall class0: 80.14
-Recall class1: 78.4
-F1 class0: 79.42
-F1 class1: 78.78
-Accuracy: 79.25
+Precision class0: 78.41
+Precision class1: 81.52
+Recall class0: 82.64
+Recall class1: 77.14
+F1 class0: 80.42
+F1 class1: 79.21
+Accuracy: 79.88
 
 -------------------------------------------------------
 NER + NER Best Freq. + LIWC
 Negative
 --------- RF --------
-Precision class0: 75.05
-Precision class1: 77.4
-Recall class0: 78.04
-Recall class1: 74.54
-F1 class0: 76.4
-F1 class1: 75.81
-Accuracy: 76.25
+Precision class0: 76.33
+Precision class1: 78.6
+Recall class0: 79.35
+Recall class1: 75.52
+F1 class0: 77.73
+F1 class1: 76.94
+Accuracy: 77.38
 
 -------------------------------------------------------
 --------- SVM --------
-Precision class0: 73.72
-Precision class1: 74.96
-Recall class0: 75.7
-Recall class1: 73.13
-F1 class0: 74.64
-F1 class1: 73.98
-Accuracy: 74.5
+Precision class0: 75.97
+Precision class1: 75.88
+Recall class0: 75.78
+Recall class1: 76.05
+F1 class0: 75.78
+F1 class1: 75.87
+Accuracy: 75.87
 
 -------------------------------------------------------
 --------- Log Reg --------
-Precision class0: 73.95
-Precision class1: 75.89
-Recall class0: 76.72
-Recall class1: 73.15
-F1 class0: 75.22
-F1 class1: 74.4
-Accuracy: 75.0
+Precision class0: 77.87
+Precision class1: 77.36
+Recall class0: 77.0
+Recall class1: 77.94
+F1 class0: 77.3
+F1 class1: 77.52
+Accuracy: 77.5
 
 -------------------------------------------------------
 Positive
 --------- RF --------
-Precision class0: 78.42
-Precision class1: 83.54
-Recall class0: 84.94
-Recall class1: 76.92
-F1 class0: 81.38
-F1 class1: 79.89
-Accuracy: 80.75
+Precision class0: 76.95
+Precision class1: 81.92
+Recall class0: 83.4
+Recall class1: 75.13
+F1 class0: 79.92
+F1 class1: 78.24
+Accuracy: 79.13
 
 -------------------------------------------------------
 --------- SVM --------
-Precision class0: 79.7
-Precision class1: 80.81
-Recall class0: 81.92
-Recall class1: 78.83
-F1 class0: 80.63
-F1 class1: 79.64
-Accuracy: 80.25
+Precision class0: 77.54
+Precision class1: 81.58
+Recall class0: 82.85
+Recall class1: 76.04
+F1 class0: 80.03
+F1 class1: 78.61
+Accuracy: 79.38
 
 -------------------------------------------------------
 --------- Log Reg --------
-Precision class0: 80.86
-Precision class1: 80.06
-Recall class0: 80.35
-Recall class1: 80.74
-F1 class0: 80.38
-F1 class1: 80.17
-Accuracy: 80.38
+Precision class0: 78.05
+Precision class1: 80.87
+Recall class0: 81.82
+Recall class1: 77.01
+F1 class0: 79.84
+F1 class1: 78.82
+Accuracy: 79.38
 
 -------------------------------------------------------
