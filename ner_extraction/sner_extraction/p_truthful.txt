@@ -1,1 +1,1 @@
-t_affinia_10.txt, truthful, p, word_count=213, total_entity_count=1, total_unique_entity_count=1, LOCATION=1, unique_LOCATION=1
+t_affinia_10.txt, truthful, p, word_count=213, total_entity_count=6, total_unique_entity_count=6, LOCATION=2, PERSON=0, ORGANIZATION=2, MONEY=0, PERCENT=0, DATE=0, TIME=2, unique_LOCATION=2, unique_PERSON=0, unique_ORGANIZATION=2, unique_MONEY=0, unique_PERCENT=0, unique_DATE=0, unique_TIME=2, 

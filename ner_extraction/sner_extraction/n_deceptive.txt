@@ -1,1 +1,1 @@
-d_affinia_10.txt, deceptive, n, word_count=224, total_entity_count=3, total_unique_entity_count=2, LOCATION=3, unique_LOCATION=2
+d_affinia_10.txt, deceptive, n, word_count=224, total_entity_count=6, total_unique_entity_count=4, LOCATION=4, PERSON=0, ORGANIZATION=0, MONEY=0, PERCENT=0, DATE=0, TIME=2, unique_LOCATION=2, unique_PERSON=0, unique_ORGANIZATION=0, unique_MONEY=0, unique_PERCENT=0, unique_DATE=0, unique_TIME=2, 

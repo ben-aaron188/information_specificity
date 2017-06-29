@@ -11,7 +11,7 @@ def extract_entities(file):
 
     # Load SNER
     st = StanfordNERTagger(
-        wd + "/stanford-ner-2014-06-16/classifiers/english.all.3class.distsim.crf.ser.gz",
+        wd + "/stanford-ner-2014-06-16/classifiers/english.muc.7class.distsim.crf.ser.gz",
         wd + "/stanford-ner-2014-06-16/stanford-ner.jar"
     )
 
@@ -34,7 +34,7 @@ def read_statements(polarity, veracity):
     st_properties = []
 
     # If you uncomment this line, only one statement of each category is analysed (for testing purposes)
-    # files = files[1:2]
+    files = files[1:2]
 
     for path in files:
         filename = path.split("/")[-1]
@@ -56,17 +56,12 @@ def read_statements(polarity, veracity):
 
 # Count the amount of occurrences for the recognised entity types
 def get_occurrences(array):
-    types = []
-    occurrences = []
+    occurrences = [["LOCATION",0], ["PERSON",0], ["ORGANIZATION",0], ["MONEY",0], ["PERCENT",0], ["DATE",0], ["TIME",0]]
 
     for elem in array:
-        if elem[1] in types:
-            for occurrence in occurrences:
-                if occurrence[0] == elem[1]:
-                    occurrence[1] += 1
-        else:
-            types.append(elem[1])
-            occurrences.append([elem[1], 1])
+        for occurrence in occurrences:
+            if occurrence[0] == elem[1]:
+                occurrence[1] += 1
 
     return occurrences
 
@@ -100,7 +95,7 @@ def analyze(polarity, veracity):
                 stringtowrite = stringtowrite + (occurrence[0] + "=" + str(occurrence[1]) + ", ")
 
             for occurrence in elem[2]:
-                stringtowrite = stringtowrite + ("unique_" + occurrence[0] + "=" + str(occurrence[1]))
+                stringtowrite = stringtowrite + ("unique_" + occurrence[0] + "=" + str(occurrence[1]) + ", ")
 
             f.write(stringtowrite)
 
