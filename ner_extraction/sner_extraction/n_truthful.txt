@@ -1,0 +1,1 @@
+t_affinia_10.txt, truthful, n, word_count=175, total_entity_count=4, total_unique_entity_count=2, PERSON=3, ORGANIZATION=1, unique_PERSON=1unique_ORGANIZATION=1

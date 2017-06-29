@@ -1,0 +1,1 @@
+d_affinia_10.txt, deceptive, p, word_count=57, total_entity_count=0, total_unique_entity_count=0, 

@@ -1,0 +1,1 @@
+d_affinia_10.txt, deceptive, n, word_count=224, total_entity_count=3, total_unique_entity_count=2, LOCATION=3, unique_LOCATION=2
