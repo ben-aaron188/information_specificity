@@ -12,10 +12,10 @@ require(splitstackshape)
 require(ez)
 require(FactoMineR)
 library(MASS)
-setwd('/Users/bennettkleinberg/Documents/Research/app/wp_onACIT/onacit/R_script/R tutorials')
-source("cohensf.R")
-source("dz_within_ci.R")
-source("ds_between_ci.R")
+# setwd('/Users/bennettkleinberg/Documents/Research/app/wp_onACIT/onacit/R_script/R tutorials')
+# source("cohensf.R")
+# source("dz_within_ci.R")
+# source("ds_between_ci.R")
 
 #set wd
 setwd('/Users/bennettkleinberg/GitHub/information_specificity/processed_data')
@@ -23,12 +23,28 @@ setwd('/Users/bennettkleinberg/GitHub/information_specificity/processed_data')
 files = list.files()
 load(files[1])
 
+
+# a = read.table("named_entities_deception_detection_data.txt", header=T)
+# b = a[,-c(4:64, 164:177)]
+# b = b[,-c(6)]
+# write.table(b
+#             , file='LIWC_data_hotel_reviews.txt'
+#             , na = 'NA'
+#             , sep = '\t'
+#             , append=F
+#             , row.names = F
+#             , col.names = T)
+
+
+
+
 data$filename_norm = str_extract(data$filename, '_(.+)\\d')
 
 #descriptives
 tapply(data$nwords, list(data$polarity_str, data$veracity_str), mean)
 tapply(data$nwords, list(data$polarity_str, data$veracity_str), sd)
-
+names(datax)
+datax = data[-c(4:6), ]
 
 #set variables
 data$ner_unique_prop = (data$ner_unique/data$nwords)*100
@@ -36,6 +52,17 @@ data$st_spec = round(data$spec_avg*100, 2)
 data$liwc_detailedness = data$percept + data$time + data$space
 data$ner_unique_verif_prop = (data$nperson_unique + data$nfac_unique + data$ngpe_unique + data$nloc_unique + data$norg_unique + data$nevent_unique + data$ndate_unique + data$ntime_unique + data$nmoney_unique)/data$nwords*100
 data$ner_unique_zerocounts_prop = (data$nperson_unique + data$nfac_unique + data$ndate_unique + data$ntime_unique + data$nmoney_unique + data$nordinal_unique + data$ncardinal_unique)/data$nwords*100
+
+data[which.max(data$ner_unique_prop), 'filename']
+
+write.table(datax
+            , file='named_entities_deception_detection_data.txt'
+            , na = 'NA'
+            , sep = '\t'
+            , append=F
+            , row.names = F
+            , col.names = T)
+
 
 #split data per polarity for follow-ups
 data_pos = data[data$polarity_str == 'positive',]
@@ -593,10 +620,14 @@ cohensf(19.24, 1, 798)
 apply(data[,c(42:59)], 2, function(x){
   prop.table(table(x == 0))
 })
+
 apply(data[,c(42:59)], 2, function(x){
   #mean(x)
-  tapply(x, list(data$polarity_str, data$veracity_str), mean)*100
+  #tapply(x, list(data$polarity_str, data$veracity_str), mean)*100
+  tapply(x/data$nwords*100, list(data$polarity_str, data$veracity_str), mean)*100
 })
+
+tapply(data$nperson_unique/data$nwords*100, list(data$polarity_str, data$veracity_str), mean)*100
 
 tapply(data$ner_unique_zerocounts_prop, list(data$polarity_str, data$veracity_str), mean)
 tapply(data$ner_unique_zerocounts_prop, list(data$polarity_str, data$veracity_str), sd)
@@ -759,17 +790,6 @@ round(tapply(data$WC, list(data$polarity_str, data$veracity_str), mean), 2)
 #[,1] --> positive truthful
 #[,1] --> negative truthful
 
-#apply(data[,c(68:161)], 2, function(x){
-set.seed(42)
-df = data.frame('x1' = rnorm(100),
-                'x2' = rnorm(100))
-
-apply(df[,c(1:2)], 2, function(x){
-  mymean = mean(x)
-  mysd = sd(x)
-  return(list(mymean, mysd))
-})
-
 
 #overall (irrespective of polarity)
 apply(data[,c(68:70)], 2, function(x){
@@ -779,4 +799,228 @@ apply(data[,c(68:70)], 2, function(x){
   effect_size = cohensf(F_value, 1, 1596)
   return(list(aggr_table, summ_aov, effect_size))
 })
+
+
+
+################MACHINE LEARNING CLASSIFICATION################################
+##ML
+require(caret)
+require(e1071)
+levels(data$veracity_num) = c(0, 1)
+
+#valence split
+data_positive = data[data$polarity_str == 'positive',]
+data_negative = data[data$polarity_str == 'negative',]
+
+names(data)
+
+features_liwc_all = c(66, 69:161)
+features_liwc_summary = c(66, 70:76)
+features_liwc_linguistic = c(66, 77:97)
+features_liwc_psychological = c(66, 98:137)
+features_liwc_personal = c(66, 138:143)
+features_liwc_informal = c(66, 144:149)
+features_liwc_punctuation = c(66, 150:161)
+features_ner = c(66, 42:59)
+features_ner_mf = c(66, 42, 44, 53, 54, 56, 58, 59)
+
+
+#positive
+data_ml = data_positive[, features_liwc_all]
+ncol(data_ml)-1
+
+#seeding
+set.seed(444)
+
+in_training = createDataPartition(y = data_ml$veracity_num
+                                  , p = .8
+                                  , list = FALSE
+                                  )
+
+training_data = data_ml[ in_training,]
+testing_data = data_ml[-in_training,]
+
+controls = trainControl(method="repeatedcv"
+                        , number=5
+                        , repeats=10
+                        , selectionFunction = "oneSE"
+                        , classProbs = F
+                        #, summaryFunction = twoClassSummary
+                        )
+
+svm_5k = train(veracity_num ~ .
+               , data = training_data
+               , method = "svmLinear"
+               , trControl = controls
+               , verbose = FALSE
+               #,metric = 'ROC'
+)
+
+predictions = predict(svm_5k, testing_data)
+
+caret::confusionMatrix(predictions
+                       , testing_data$veracity_num
+                       , dnn = c("algorithm", "data")
+                       , positive = '0')
+
+varImp(svm_5k, scale=F)
+
+
+
+#negative
+data_ml = data_negative[, features_ner]
+ncol(data_ml)-1
+
+#seeding
+set.seed(444)
+
+in_training = createDataPartition(y = data_ml$veracity_num
+                                  , p = .8
+                                  , list = FALSE
+)
+
+training_data = data_ml[ in_training,]
+testing_data = data_ml[-in_training,]
+
+controls = trainControl(method="repeatedcv"
+                        , number=5
+                        , repeats=10
+                        , selectionFunction = "oneSE"
+                        , classProbs = F
+                        #, summaryFunction = twoClassSummary
+)
+
+svm_5k = train(veracity_num ~ .
+               , data = training_data
+               , method = "svmLinear"
+               , trControl = controls
+               , verbose = FALSE
+               #,metric = 'ROC'
+               )
+
+predictions = predict(svm_5k, testing_data)
+
+caret::confusionMatrix(predictions
+                       , testing_data$veracity_num
+                       , dnn = c("algorithm", "data")
+                       , positive = '0')
+
+varImp(svm_5k, scale=F)
+
+#cross valence ML
+features_liwc_all = c(18, 187, 94:186)
+features_liwc_psychological = c(18, 187, 123:162)
+
+data_ml = data[, features_liwc_psychological]
+ncol(data_ml)-2
+
+#seeding
+set.seed(444)
+
+#future --> past
+training_data = data_ml[data_ml$time.x == 'future',]
+testing_data = data_ml[data_ml$time.x == 'past',]
+table(testing_data$time.x)
+table(training_data$time.x)
+
+controls = trainControl(method="repeatedcv"
+                        , number=5
+                        , repeats=10
+                        , selectionFunction = "oneSE"
+                        , classProbs = F
+                        #, summaryFunction = twoClassSummary
+)
+svm_5k = train(veracity ~ .
+               , data = training_data[,-1]
+               , method = "svmLinear"
+               , trControl = controls
+               , verbose = FALSE
+               #,metric = 'ROC'
+)
+
+predictions = predict(svm_5k, testing_data)
+
+caret::confusionMatrix(predictions
+                       , testing_data$veracity
+                       , dnn = c("algorithm", "data")
+                       , positive = '0')
+
+varImp(svm_5k, scale=F)
+
+#past --> future
+set.seed(444)
+
+training_data = data_ml[data_ml$time.x == 'past',]
+testing_data = data_ml[data_ml$time.x == 'future',]
+table(testing_data$time.x)
+table(training_data$time.x)
+
+controls = trainControl(method="repeatedcv"
+                        , number=5
+                        , repeats=10
+                        , selectionFunction = "oneSE"
+                        , classProbs = F
+                        #, summaryFunction = twoClassSummary
+)
+svm_5k = train(veracity ~ .
+               , data = training_data[,-1]
+               , method = "svmLinear"
+               , trControl = controls
+               , verbose = FALSE
+               #,metric = 'ROC'
+)
+
+predictions = predict(svm_5k, testing_data)
+
+caret::confusionMatrix(predictions
+                       , testing_data$veracity
+                       , dnn = c("algorithm", "data")
+                       , positive = '0')
+
+varImp(svm_5k, scale=F)
+
+
+
+caret::confusionMatrix(svm_5k)
+
+predictions = predict(svm_5k, testing_data)
+
+testing_data$pred = predictions
+
+caret::confusionMatrix(predictions
+                       , testing_data$veracity
+                       , dnn = c("algorithm", "data")
+                       , positive = '0')
+
+caret::confusionMatrix(data = testing_data$pred
+                       , reference = testing_data$veracity
+                       , dnn = c("algorithm", "data")
+                       , mode = "prec_recall")
+
+
+
+varImp(svm_5k, scale=F)
+
+#follow-up
+ezANOVA(
+  data = data
+  , dv = social
+  , wid = unid
+  , within_covariates = NULL
+  , between = .(veracity, time_instr)
+  , between_covariates = NULL
+  , observed = NULL
+  , diff = NULL
+  , reverse_diff = FALSE
+  , type = 3
+  , white.adjust = FALSE
+  , detailed = FALSE
+  , return_aov = T
+)
+tapply(data$ncardinal_unique, list(data$veracity, data$time_instr), mean)
+tapply(data$ncardinal_unique, list(data$veracity, data$time_instr), sd)
+
+
+
+citation('caret')
 

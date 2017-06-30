@@ -1,0 +1,3 @@
+We stayed at the Hard Rock on January 27th, 2009 [DATE] for $125/night [MONEY]. It is located on Michigan Ave [PERSON], just two [CARDINAL] blocks from the Mag Mile, two [CARDINAL] blocks from Millenium Park [PERSON], and five [CARDINAL] blocks from the Chicago Art Institute [ORGANIZATION]. Our hotel room was very nice with views of Michigan Ave [PERSON] and a unusually comfy bed. The hotel even offered free coffee in the lobby every morning and free wifi in the rooms. Parking was $45 [MONEY] for valet and $30 [MONEY] for self parking. The staff was very helpful with all of our request. 
+
+t_hardrock_6
