@@ -27,6 +27,8 @@ def extract_entities(file, polarity, veracity):
 
     return cleaned
 
+# string = "We stayed at the Hard Rock on January 27th, 2009 for $125/night. It is located on Michigan Ave, just two blocks from the Mag Mile, two blocks from Millenium Park, and five blocks from the Chicago Art Institute.""
+# print(extract_entities(string, "", ""))
 
 # Read all statements
 def read_statements(polarity, veracity):
@@ -102,7 +104,8 @@ def analyze(polarity, veracity):
             for occurrence in elem[2]:
                 stringtowrite = stringtowrite + ("unique_" + occurrence[0] + "=" + str(occurrence[1]) + ", ")
 
-            stringtowrite += "occurrences: {" + ", ".join(map(str, elem[8])) + "}, unique_occurrences: {" + ", ".join(map(str, elem[9])) + "}\n"
+            # stringtowrite += "occurrences: {" + ", ".join(map(str, elem[8])) + "}, unique_occurrences: {" + ", ".join(map(str, elem[9])) + "}\n"
+            stringtowrite += "\n"
 
         f.write(stringtowrite)
         f.close()
