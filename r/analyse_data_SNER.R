@@ -340,12 +340,12 @@ aov_ner_unique_prop_POS <- ezANOVA(
 )
 aov_ner_unique_prop_POS
 
-cohensf(16, 1, 798)
+cohensf(16.02, 1, 798)
 
 data_neg = data[data$polarity_str == 'negative',]
 aov_ner_unique_prop_NEG <- ezANOVA(
   data = data_neg
-  , dv = ner_unique_prop
+  , dv = sner_ner_unique_prop
   , wid = originalpath.x
   , within = NULL
   , within_covariates = NULL
@@ -361,7 +361,8 @@ aov_ner_unique_prop_NEG <- ezANOVA(
 )
 aov_ner_unique_prop_NEG
 
-cohensf(63.63, 1, 798)
+cohensf(1.01, 1, 798)
+
 
 #ner unique sum
 tapply(data$ner_unique, list(data$polarity, data$veracity), mean)
@@ -386,4 +387,61 @@ aov_ner_unique <- ezANOVA(
 aov_ner_unique
 
 
-###agreement SNER and Spacy
+#ROC
+require(pROC)
+auc_sner = roc(data$veracity_str ~ data$sner_ner_unique_prop, ci=T)
+auc_ner = roc(data$veracity_str ~ data$ner_unique_prop, ci=T)
+
+
+roc.test(auc_sner, auc_ner, method = 'v')
+
+auc_sner_pos = roc(data$veracity_str[data$polarity_str == 'positive'] ~ data$sner_ner_unique_prop[data$polarity_str == 'positive'], ci=T)
+auc_sner_neg = roc(data$veracity_str[data$polarity_str == 'negative'] ~ data$sner_ner_unique_prop[data$polarity_str == 'negative'], ci=T)
+
+#sparsity
+names(data)
+apply(data[,c(183:189)], 2, function(x){
+  prop.table(table(x == 0))
+})
+
+#props per category
+data[,c(183:189)] = apply(data[,c(183:189)], 2, function(x){
+  (x/data$nwords)*100
+})
+
+names(data)
+data[,c(42:59)] = apply(data[,c(42:59)], 2, function(x){
+  (x/data$nwords)*100
+})
+
+#overall effect
+apply(data[,c(183:189)], 2, function(x){
+  aggr_table = round(tapply(x, list(data$polarity_str, data$veracity_str), mean)*100, 2)
+  aggr_table_sd = round(tapply(x, list(data$polarity_str, data$veracity_str), sd)*100, 2)
+  summ_aov = summary(aov(x ~ data$polarity_str*data$veracity_str))
+  F_value = summ_aov[[1]][["F value"]][2]
+  effect_size = cohensf(F_value, 1, 1596)
+  return(list(aggr_table, aggr_table_sd, summ_aov, effect_size))
+})
+
+#pos
+data_pos = data[data$polarity_str == 'positive',]
+apply(data_pos[,c(183:189)], 2, function(x){
+  aggr_table = round(tapply(x, list(data_pos$veracity_str), mean)*100, 2)
+  aggr_table_sd = round(tapply(x, list(data_pos$veracity_str), sd)*100, 2)
+  summ_aov = summary(aov(x ~ data_pos$veracity_str))
+  F_value = summ_aov[[1]][["F value"]][1]
+  effect_size = cohensf(F_value, 1, 798)
+  return(list(summ_aov, effect_size))
+})
+
+#neg
+data_neg = data[data$polarity_str == 'negative',]
+apply(data_neg[,c(183:189)], 2, function(x){
+  aggr_table = round(tapply(x, list(data_neg$veracity_str), mean)*100, 2)
+  aggr_table_sd = round(tapply(x, list(data_neg$veracity_str), sd)*100, 2)
+  summ_aov = summary(aov(x ~ data_neg$veracity_str))
+  F_value = summ_aov[[1]][["F value"]][1]
+  effect_size = cohensf(F_value, 1, 798)
+  return(list(summ_aov, effect_size))
+})
