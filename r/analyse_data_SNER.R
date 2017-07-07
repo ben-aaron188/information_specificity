@@ -171,7 +171,7 @@ sner$sner_ner_unique_prop = (sner$sner_ner_unique/sner$sner_nwords)*100
 sner$sner_ner_unique_verif_prop = (sner$sner_person_unique + sner$sner_location_unique + sner$sner_organization_unique + sner$sner_date_unique + sner$sner_time_unique + sner$sner_money_unique)/sner$sner_nwords*100
 
 save(sner
-     , file = 'SNER.RData')
+     , file = 'SNER_07072017.RData')
 
 #merge to full data
 setwd('/Users/bennettkleinberg/GitHub/information_specificity/processed_data')
@@ -192,11 +192,11 @@ sner = sner
 spacy_and_sner = merge(spacy_liwc_st, sner, by=c('filename', 'polarity_str', 'veracity_str'))
 
 save(spacy_and_sner
-     , file = 'spacy_liwc_speciteller_sner.RData')
+     , file = 'spacy_liwc_speciteller_sner_07072017.RData')
 
 
 #################################################
-load('spacy_liwc_speciteller_sner.RData')
+load('spacy_liwc_speciteller_sner_07072017.RData')
 
 data = spacy_and_sner
 
@@ -297,15 +297,15 @@ cor(x = data$sner_ner_unique, y = data$ner_unique)
 
 
 #ner unique prop
-data$id = row.names(data)
+names(data)
 require(ez)
 aov_ner_unique_prop <- ezANOVA(
   data = data
-  , dv = ner_unique_prop
-  , wid = id
+  , dv = sner_ner_unique_prop
+  , wid = originalpath.x
   , within = NULL
   , within_covariates = NULL
-  , between = .(polarity, veracity)
+  , between = .(polarity_str, veracity_str)
   , between_covariates = NULL
   , observed = NULL
   , diff = NULL
@@ -317,15 +317,18 @@ aov_ner_unique_prop <- ezANOVA(
 )
 aov_ner_unique_prop
 
+cohensf(15.15, 1, 1596)
+cohensf(187.41, 1, 1596)
+cohensf(7.73, 1, 1596)
 
-data_pos = data[data$polarity == 'positive',]
+data_pos = data[data$polarity_str == 'positive',]
 aov_ner_unique_prop_POS <- ezANOVA(
   data = data_pos
-  , dv = ner_unique_prop
-  , wid = id
+  , dv = sner_ner_unique_prop
+  , wid = originalpath.x
   , within = NULL
   , within_covariates = NULL
-  , between = .(veracity)
+  , between = .(veracity_str)
   , between_covariates = NULL
   , observed = NULL
   , diff = NULL
@@ -337,15 +340,16 @@ aov_ner_unique_prop_POS <- ezANOVA(
 )
 aov_ner_unique_prop_POS
 
+cohensf(16, 1, 798)
 
-data_neg = data[data$polarity == 'negative',]
+data_neg = data[data$polarity_str == 'negative',]
 aov_ner_unique_prop_NEG <- ezANOVA(
   data = data_neg
   , dv = ner_unique_prop
-  , wid = id
+  , wid = originalpath.x
   , within = NULL
   , within_covariates = NULL
-  , between = .(veracity)
+  , between = .(veracity_str)
   , between_covariates = NULL
   , observed = NULL
   , diff = NULL
@@ -356,6 +360,8 @@ aov_ner_unique_prop_NEG <- ezANOVA(
   , return_aov = T
 )
 aov_ner_unique_prop_NEG
+
+cohensf(63.63, 1, 798)
 
 #ner unique sum
 tapply(data$ner_unique, list(data$polarity, data$veracity), mean)
