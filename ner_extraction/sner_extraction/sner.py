@@ -1,34 +1,30 @@
 from nltk.tag import StanfordNERTagger
-import glob
-import os
-import csv
-import ner
+import glob, os, csv
 
 
 # Specify your working directory
-wd = "/Users/maximilianmozes/Desktop/GitHub/information_specificity/ner_extraction/sner_extraction"
-count = 0
+wd = os.getcwd()
 
 
 # Get entities of given file
 def extract_entities(file, polarity, veracity):
-    global count
+
+    # Load SNER
+    st = StanfordNERTagger(
+        wd + "/stanford-ner-2014-06-16/classifiers/english.muc.7class.distsim.crf.ser.gz",
+        wd + "/stanford-ner-2014-06-16/stanford-ner.jar"
+    )
+
+    extracted = st.tag(file.split())
     cleaned = []
 
-    tagger = ner.SocketNER(host='localhost', port=8080)
-    extracted = tagger.get_entities(file)
-
-    for (elem, value) in extracted.items():
-        for val in value:
-            cleaned.append((val,elem))
-
-    count = count + 1
-    print("NE log " + str(count) + " " + polarity + " " + veracity)
+    for elem in extracted:
+        # Remove all elements that are useless.
+        if elem[1] != "O":
+            cleaned.append(elem)
 
     return cleaned
 
-# string = "We stayed at the Hard Rock on January 27th, 2009 for $125/night. It is located on Michigan Ave, just two blocks from the Mag Mile, two blocks from Millenium Park, and five blocks from the Chicago Art Institute.""
-# print(extract_entities(string, "", ""))
 
 # Read all statements
 def read_statements(polarity, veracity):
@@ -37,13 +33,11 @@ def read_statements(polarity, veracity):
     statements = []
     st_properties = []
 
-    # If you uncomment this line, only one statement of each category is analysed (for testing purposes)
-    # files = files[1:5]
-
     for path in files:
         filename = path.split("/")[-1]
 
         with open(path) as f_input:
+
             # Read every statement
             text = f_input.read()
             statements.append([text, len(text.split())])
@@ -88,7 +82,7 @@ def analyze(polarity, veracity):
         occurrences = get_occurrences(entities)
         unique_occurrences = get_occurrences(unique_entities)
 
-        analyzed.append([statement[0], occurrences, unique_occurrences, veracity, polarity, statement[4], entitycount, unique_entitycount, entities, unique_entities])
+        analyzed.append([statement[0], occurrences, unique_occurrences, veracity, polarity, statement[4]])
 
     # Write the results to a .txt file
     with open(filename, 'w') as f:
@@ -96,7 +90,7 @@ def analyze(polarity, veracity):
 
         for elem in analyzed:
 
-            stringtowrite = stringtowrite + elem[0] + ", " + elem[3] + ", " + elem[4] + ", word_count=" + str(elem[5]) + ", " + "total_entity_count=" + str(elem[6]) + ", total_unique_entity_count=" + str(elem[7]) + ", "
+            stringtowrite = stringtowrite + elem[0] + ", " + elem[3] + ", " + elem[4] + ", word_count=" + str(elem[5]) + ", " + "total_entity_count=" + str(entitycount) + ", total_unique_entity_count=" + str(unique_entitycount) + ", "
 
             for occurrence in elem[1]:
                 stringtowrite = stringtowrite + (occurrence[0] + "=" + str(occurrence[1]) + ", ")
@@ -104,13 +98,13 @@ def analyze(polarity, veracity):
             for occurrence in elem[2]:
                 stringtowrite = stringtowrite + ("unique_" + occurrence[0] + "=" + str(occurrence[1]) + ", ")
 
-            # stringtowrite += "occurrences: {" + ", ".join(map(str, elem[8])) + "}, unique_occurrences: {" + ", ".join(map(str, elem[9])) + "}\n"
             stringtowrite += "\n"
 
         f.write(stringtowrite)
         f.close()
 
 
+# ======================== MAIN ========================
 # Run the analysis 4 times -> 4 .txt files should be created
 analyze("n", "truthful")
 analyze("n", "deceptive")

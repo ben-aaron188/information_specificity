@@ -1,5 +1,3 @@
-#!/usr/local/bin/python3.5
-
 #import dependencies
 from utils import *
 
