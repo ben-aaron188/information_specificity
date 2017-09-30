@@ -27,6 +27,7 @@ def sum_up(list):
 # pol {Integer} -> the polarity the data is filtered on (truthful = 1,
 # deceptive = 0)
 def get_data(path, feature_set, pol):
+<<<<<<< HEAD
     features = []
     with open(path) as csv_file:
         reader = csv.reader(csv_file)
@@ -102,6 +103,99 @@ def get_data(path, feature_set, pol):
         X.append(elem[0])
         C.append(elem[1])
     return X, C
+=======
+	features = []
+
+	with open(path) as csv_file:
+		reader = csv.reader(csv_file)
+		for row in reader:
+			vector = []
+			polarity = int(row[len(row) - 4])
+			veracity = int(row[len(row) - 5])
+
+			if polarity == pol:
+
+				# NER
+				if feature_set == "ner":
+					for i in range(41, 59):
+						vector.append(float(row[i]))
+
+					vector.append(float(row[171]))
+
+				# NER Best Freq.
+				elif feature_set == "nerbf":
+					vector.append(float(row[41]))
+					vector.append(float(row[43]))
+					vector.append(float(row[52]))
+					vector.append(float(row[53]))
+					vector.append(float(row[55]))
+					vector.append(float(row[57]))
+					vector.append(float(row[58]))
+
+				# LIWC
+				elif feature_set == "liwc":
+					for i in range(68, 161):
+						vector.append(float(row[i]))
+
+				# LIWC + NER
+				elif feature_set == "nerliwc":
+					for i in range(41, 59):
+						vector.append(float(row[i]))
+
+					for i in range(68, 161):
+						vector.append(float(row[i]))
+
+					vector.append(float(row[171]))
+					vector.append(float(row[167]))
+
+				# LIWC + NER Best Freq.
+				elif feature_set == "liwcnerbf":
+					vector.append(float(row[41]))
+					vector.append(float(row[43]))
+					vector.append(float(row[52]))
+					vector.append(float(row[53]))
+					vector.append(float(row[55]))
+					vector.append(float(row[57]))
+					vector.append(float(row[58]))
+
+					for i in range(68, 161):
+						vector.append(float(row[i]))
+
+				# LIWC + NER + NER Best Freq.
+				elif feature_set == "liwcnernerbf":
+					vector.append(float(row[41]))
+					vector.append(float(row[43]))
+					vector.append(float(row[52]))
+					vector.append(float(row[53]))
+					vector.append(float(row[55]))
+					vector.append(float(row[57]))
+					vector.append(float(row[58]))
+
+					for i in range(68, 161):
+						vector.append(float(row[i]))
+
+					for i in range(41, 59):
+						vector.append(float(row[i]))
+
+					vector.append(float(row[171]))
+
+				# add the class for each vector
+				features.append([vector, veracity])
+
+	random.shuffle(features, lambda: 0.42)
+
+	# feature array
+	X = []
+
+	# corresponding classes
+	C = []
+
+	for elem in features:
+		X.append(elem[0])
+		C.append(elem[1])
+
+	return X, C
+>>>>>>> dev
 
 
 # Computes the accuracy for given targets and predictions.
@@ -237,6 +331,7 @@ def calculate_results(pa0, pa1, ra0, ra1, f10, f11, acc):
 # Parameters:
 # k {Integer} -> k
 def main(k):
+<<<<<<< HEAD
     feature_sets = [
         ["NER", "ner"],
         ["NER Best Freq.", "nerbf"],
@@ -293,3 +388,75 @@ def main(k):
             pn_fold(k, lr, cross[1], feature_set[1], path)
             print("")
             print("-------------------------------------------------------")
+=======
+	feature_sets = [
+		["NER", "ner"],
+		["NER Best Freq.", "nerbf"],
+		["LIWC", "liwc"],
+		["NER + LIWC", "nerliwc"],
+		["NER Best Freq. + LIWC", "liwcnerbf"],
+		["NER + NER Best Freq. + LIWC", "liwcnernerbf"]
+	]
+
+	polarities = [
+		["Negative", 0],
+		["Positive", 1]
+	]
+
+	crossed = [
+		["Negative -> Positive", 0],
+		["Positive -> Negative", 1],
+	]
+
+	path = "inf_spec_ner_liwc_speciteller.csv"
+
+	rf = RandomForestClassifier(n_estimators=200, criterion='entropy', random_state=42)
+	svc = LinearSVC(penalty="l1", dual=False, tol=1e-3, random_state=42)
+	lr = LogisticRegression(random_state=42)
+
+	for feature_set in feature_sets:
+		print(feature_set[0])
+		for polarity in polarities:
+			print(polarity[0])
+			X, C = get_data(path, feature_set[1], polarity[1])
+
+			# run k-fold cv
+			print("--------- RF --------")
+			manual_cross_val(k, rf, X, C)
+			print("")
+			print("-------------------------------------------------------")
+			print("--------- SVM --------")
+			manual_cross_val(k, svc, X, C)
+			print("")
+			print("-------------------------------------------------------")
+			print("--------- Log Reg --------")
+			manual_cross_val(k, lr, X, C)
+			print("")
+			print("-------------------------------------------------------")
+
+	print("============================================================")
+
+	for feature_set in feature_sets:
+		print(feature_set[0])
+
+		for cross in crossed:
+			print(cross[0])
+
+			# run k-fold cv
+			print("--------- RF --------")
+			pn_fold(k, rf, cross[1], feature_set[1], path)
+			print("")
+			print("-------------------------------------------------------")
+			print("--------- SVM --------")
+			pn_fold(k, svc, cross[1], feature_set[1], path)
+			print("")
+			print("-------------------------------------------------------")
+			print("--------- Log Reg --------")
+			pn_fold(k, lr, cross[1], feature_set[1], path)
+			print("")
+			print("-------------------------------------------------------")
+
+
+
+main(5)
+>>>>>>> dev

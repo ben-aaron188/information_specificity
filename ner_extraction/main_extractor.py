@@ -1,5 +1,3 @@
-#!/usr/local/bin/python3.5
-
 #import dependencies
 from __future__ import division
 import csv
@@ -13,9 +11,7 @@ import glob
 import time
 import spacy
 
-
 dirname = os.path.dirname
-
 
 def main_extractor(input, outputname, kind):
     timestr = time.strftime("%d%m%Y")
@@ -31,11 +27,8 @@ def main_extractor(input, outputname, kind):
         writer = csv.writer(csvfilevar, lineterminator='\n')
         writer.writerows(output_row)
 
-
-# basedir = '/Users/bennettkleinberg/GitHub/information_specificity/data_'
-hotel_reviews_negative = '/Users/bennettkleinberg/Documents/Research/CBDMI_Schiphol/re_analysis/op_spam_v1.4/negative_polarity'
-hotel_reviews_positive = '/Users/bennettkleinberg/Documents/Research/CBDMI_Schiphol/re_analysis/op_spam_v1.4/positive_polarity'
-
+hotel_reviews_negative = '-- set directory to negative review files --'
+hotel_reviews_positive = '-- set directory to positive review files --'
 
 def analyse_files(filepath, outputappendix, kind):
     # take t1

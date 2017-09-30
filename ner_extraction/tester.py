@@ -8,6 +8,7 @@ for sentence in parsed_input.sents:
         print(str(entity), entity.label_, entity.label)
 
 word_array = []
+
 for token in parsed_input:
     # if token.pos_ is not 'PUNCT' and token.orth_ not in spacy.en.STOPWORDS:
     # if token.pos_ is not 'PUNCT' and parser.vocab[token.orth_].is_stop == 0:

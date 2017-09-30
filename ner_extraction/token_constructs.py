@@ -1,5 +1,3 @@
-#!/usr/local/bin/python3.5
-
 #import dependencies
 from __future__ import division
 from utils import *
